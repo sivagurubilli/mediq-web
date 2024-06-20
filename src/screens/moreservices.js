@@ -32,7 +32,7 @@ function Moreservices() {
                 const data = response.data;
                 if (data.code === 200) {
                     setServices(data.data.types);
-                    console.error('response:', response.data);
+                    console.error('response:', data);
                 } else {
                     throw new Error(`API error! Code: ${data.code}`);
                 }
@@ -45,6 +45,25 @@ function Moreservices() {
         fetchData();
     }, []);
 
+    const handleCardClick = (id, slug) => {
+        switch(id) {
+            case 1:
+                navigate('/police');
+                break;
+            case 2:
+                navigate('/fire-stations');
+                break;
+            case 3:
+                navigate('/blood-banks');
+                break;
+            case 4:
+                navigate('/mortuaries');
+                break;
+            default:
+                navigate(`/service/${slug}`);
+        }
+    }
+
     if (error) {
         return <div style={styles.errorContainer}>Error: {error}</div>;
     }
@@ -56,7 +75,7 @@ function Moreservices() {
                     <div 
                         key={service.id} 
                         style={styles.cardContainer} 
-                        onClick={() => navigate(`/service/${service.slug}`)} 
+                        onClick={() => handleCardClick(service.id, service.slug)} 
                     >
                         <div style={styles.gradient}>
                             <div style={styles.cardContent}>
@@ -73,7 +92,6 @@ function Moreservices() {
         </div>
     );
 }
-
 
 const styles = {
     container: {

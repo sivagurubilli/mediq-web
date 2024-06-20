@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { POLICE_DETAILS } from './api'; 
+import { POLICE_DETAILS } from './api';
 
 function ServiceDetail() {
     const { slug } = useParams();
@@ -14,6 +14,10 @@ function ServiceDetail() {
             const token = localStorage.getItem('token');
             if (!token) {
                 setError('No authorization token found');
+                return;
+            }
+            if (window.location.protocol!== 'https:' && window.location.hostname!== 'localhost') {
+                setError('Geolocation is only available in secure contexts (HTTPS) or on localhost');
                 return;
             }
             try {
@@ -78,9 +82,11 @@ function ServiceDetail() {
         <div style={styles.container}>
             <div style={styles.cardContent}>
                 <h2 style={styles.cardTitle}>{serviceDetail.name}</h2>
-                <p style={styles.cardDescription}>Phone: {serviceDetail.phone}</p>
-                <p style={styles.cardDescription}>Address: {serviceDetail.address_line1}</p>
-                <p style={styles.cardDescription}>Pincode: {serviceDetail.pincode}</p>
+                <p style={styles.cardDescription}>{serviceDetail.address_line1}</p>
+                <p style={styles.cardDescription}>{serviceDetail.pincode}</p>
+                <p style={styles.cardDescription}>
+                    Phone: <a href={`tel:${serviceDetail.phone}`} style={styles.phoneLink}>{serviceDetail.phone}</a>
+                </p>
                 <button style={styles.directionButton} onClick={handleDirectionsClick}>
                     Get Directions 🧭
                 </button>
@@ -113,6 +119,10 @@ const styles = {
     cardDescription: {
         fontSize: 15,
         color: 'black',
+    },
+    phoneLink: {
+        color: '#007BFF',
+        textDecoration: 'none',
     },
     errorContainer: {
         color: 'red',

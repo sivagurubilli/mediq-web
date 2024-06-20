@@ -21,10 +21,9 @@ function App() {
         <Route path="/services" element={<ServiceScreen />} />
         <Route path="/moreServices" element={<Moreservices />} />
         <Route path="/SelectEmergency" element={<EmergencyScreen />} />
-        {/* Add the route for the map */}
         <Route path="/map" element={<Map />} />
         <Route path="/driver" element={<DriverScreen />} />
-        <Route path="/service/:slug" element={<ServiceDetail />} />
+        <Route path="/police" element={<ServiceDetail />} />
         <Route path="/YourPreferred" element={<PreferredHospitalsScreen />} />
       </Routes>
     </Router>

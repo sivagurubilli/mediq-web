@@ -1,59 +1,89 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { PREFERRED_HOSPITAL } from './api'; // Assuming this imports the correct endpoint
 import axios from 'axios';
 
 function PreferredHospitalsScreen() {
     const [preferredHospitals, setPreferredHospitals] = useState([]);
-    const { emergencyType } = useParams(); // Assuming you're passing emergencyType as a parameter
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetchPreferredHospitals(emergencyType); // Fetch hospitals when emergencyType changes
-    }, [emergencyType]);
+        fetchPreferredHospitals(); // Fetch hospitals when the component mounts
+    }, []);
 
-    const fetchPreferredHospitals = async (emergencyType) => {
-        const token = localStorage.getItem('token');
-        console.log('Token:', token);
-        console.log('emergencyType:', emergencyType);
-      
+    const fetchPreferredHospitals = async () => {
         try {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                console.error('Token is missing');
+                setError('Token is missing');
+                return;
+            }
+
+            console.log('Token:', token);
+
             const response = await axios.get(PREFERRED_HOSPITAL, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                },
-                params: {
-                    emergencyType: emergencyType // Adjust if query parameter is needed
                 }
             });
-    
+
             console.log('Response:', response); // Log the full response for further inspection
-    
+
             if (response.status === 200) {
-                setPreferredHospitals(response.data.data.preferredHospitals); // Adjust based on API structure
+                if (response.data.data && response.data.data.preferredHospitals) {
+                    setPreferredHospitals(response.data.data.preferredHospitals);
+                } else {
+                    console.warn('No preferred hospitals data found in response');
+                    setPreferredHospitals([]);
+                }
             } else {
-                throw new Error('Failed to fetch preferred hospitals');
+                console.error('Unexpected response status:', response.status, response.data);
+                setError(`Failed to fetch preferred hospitals: ${response.status}`);
             }
         } catch (error) {
-            console.error('Error fetching preferred hospitals:', error);
+            if (error.response) {
+                // The request was made and the server responded with a status code that falls out of the range of 2xx
+                console.error('Error response data:', error.response.data);
+                console.error('Error response status:', error.response.status);
+                console.error('Error response headers:', error.response.headers);
+                setError(`Failed to fetch preferred hospitals: ${error.response.status}`);
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.error('Error request:', error.request);
+                setError('Failed to fetch preferred hospitals: No response received');
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.error('Error message:', error.message);
+                setError(`Failed to fetch preferred hospitals: ${error.message}`);
+            }
+            console.error('Error config:', error.config);
         }
     };
     
-
     return (
         <div>
             <h2>Preferred Hospitals</h2>
-            <ul>
-                {preferredHospitals.map(hospital => (
-                    <li key={hospital.id}>
-                        <h3>{hospital.name}</h3>
-                        <p>{hospital.branchTypeName}</p>
-                        <p>{hospital.address_line1}</p>
-                        <p>{hospital.pincode}</p>
-                        <p>{hospital.phone}</p>
-                    </li>
-                ))}
-            </ul>
+            {error ? (
+                <p>Error: {error}</p>
+            ) : (
+                preferredHospitals.length > 0 ? (
+                    <ul>
+                        {preferredHospitals.map(hospital => (
+                            <li key={hospital.id}>
+                                <h3>{hospital.name}</h3>
+                                <p>{hospital.branchTypeName}</p>
+                                <p>{hospital.address_line1}</p>
+                                <p>{hospital.pincode}</p>
+                                <p>{hospital.phone}</p>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No preferred hospitals found.</p>
+                )
+            )}
         </div>
     );
 }

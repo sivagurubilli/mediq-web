@@ -235,7 +235,7 @@ const Home = () => {
                 <p style={styles.section2Text3}>Experience the future of emergency medical transport with LYFGUARD. Your lifeline, our priority.</p>
             </div>
 
-            <Container fluid style={styles.cardContainer}>
+            <Container  style={styles.cardContainer}>
                 <Row>
                     <Col lg={4} md={6} sm={12}>
                         <div
