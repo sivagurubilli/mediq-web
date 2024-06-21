@@ -5,7 +5,7 @@ import Geocode from 'react-geocode';
 import { EMERGENCY_BOOK, BOOKING_BY_BOOKINGID, CANCEL_BOOKING } from './api';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-Geocode.setApiKey('AIzaSyCLg_Oahf9q1keNmJoqHc_Uk4f0fu3YmxU'); // Replace with your actual API key
+Geocode.setApiKey('YOUR_GOOGLE_API_KEY'); // Replace with your actual API key
 
 const containerStyle = {
   width: '100%',
@@ -377,7 +377,7 @@ const MapScreen = () => {
       <div style={styles.header}>
         <h1 style={styles.title}>{selectedButton}</h1>
       </div>
-      <LoadScript googleMapsApiKey="AIzaSyCLg_Oahf9q1keNmJoqHc_Uk4f0fu3YmxU" libraries={libraries}>
+      <LoadScript googleMapsApiKey="YOUR_GOOGLE_API_KEY" libraries={libraries}>
         <Autocomplete
           onLoad={(autocomplete) => (autocompleteRef.current = autocomplete)}
           onPlaceChanged={onPlaceChanged}
