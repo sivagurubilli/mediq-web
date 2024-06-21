@@ -182,12 +182,12 @@ const Home = () => {
                 />
             </section>
 
-            <Container>
+            <Container >
                 <Row className="align-items-center">
                     <Col xs={12} md={12} lg={12} sm={12}>
                         <div ref={sliderRef}>
                             <h2 style={styles.ourpartners}>OUR PARTNERS</h2>
-                            <Slider {...settings} style={styles.wrapper}>
+                            <Slider {...settings} >
                                 <div className="swiper-slide" style={styles.slide}>
                                     <img
                                         src={require('./assets/amazon_img.webp')}
@@ -229,13 +229,15 @@ const Home = () => {
                 </Row>
             </Container>
 
-            <div>
-                <h3 style={styles.section2Text1}>FEATURES</h3>
-                <h4 style={styles.section2Text2}>Experience Our Distinctive Traits</h4>
-                <p style={styles.section2Text3}>Experience the future of emergency medical transport with LYFGUARD. Your lifeline, our priority.</p>
-            </div>
+            <Container>
+                <div>
+                    <h3 style={styles.section2Text1}>FEATURES</h3>
+                    <h4 style={styles.section2Text2}>Experience Our Distinctive Traits</h4>
+                    <p style={styles.section2Text3}>Experience the future of emergency medical transport with LYFGUARD. Your lifeline, our priority.</p>
+                </div>
+            </Container>
 
-            <Container  style={styles.cardContainer}>
+            <Container style={styles.cardContainer}>
                 <Row>
                     <Col lg={4} md={6} sm={12}>
                         <div
@@ -389,7 +391,6 @@ const Home = () => {
             </Container>
 
             <Container fluid style={styles.section4}>
-
                 <Row className="align-items-center">
                     <img
                         src={require('./assets/masterimage2.png')}
@@ -436,14 +437,12 @@ const Home = () => {
 
                     </Col>
                 </Row>
-
             </Container>
 
-
-            <div className="section5" style={styles.section5}>
+            <div style={styles.section5}>
                 <p style={styles.section5Text1}>Witness the Impact</p>
                 <p style={styles.section5Text2}>Hear from Our Valued Clients</p>
-                <div className="section5content" style={styles.section5content}>
+                <div style={styles.section5content}>
                     <div>
                         <p style={styles.section5contentText1}>100%</p>
                         <p style={styles.section5contentText2}>Satisfaction</p>
@@ -459,11 +458,12 @@ const Home = () => {
                 </div>
             </div>
 
-            <div ref={teamRef}>
-                <p style={styles.section2Text1}>Meat Our Team</p>
-                <p style={styles.section2Text3}>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
-            </div>
-
+            <Container>
+                <div ref={teamRef}>
+                    <p style={styles.section2Text1}>Meat Our Team</p>
+                    <p style={styles.section2Text3}>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
+                </div>
+            </Container>
             <Container fluid style={styles.cardContainer}>
                 <Row>
                     <Col lg={3} md={6} sm={12}>
@@ -548,7 +548,7 @@ const Home = () => {
                 </Row>
             </Container>
 
-            <Container fluid style={styles.section7}>
+            <Container fluid ref={contactRef} style={styles.section7}>
                 <Row>
                     <Col lg={12}>
                         <p style={styles.section5Text1}>Install LyfGuard and Start Using</p>
@@ -588,7 +588,7 @@ const Home = () => {
                 </Row>
             </Container>
 
-            <Container fluid ref={contactRef} style={styles.Section8container}>
+            <Container fluid style={styles.Section8container}>
                 <Row >
                     {/* <img
                         src={require('./assets/LyfGuardLogo.png')}
@@ -741,9 +741,7 @@ const styles = {
         fontSize: 22,
         fontWeight: '600',
     },
-    wrapper: {
-        height: 130,
-    },
+    
     slide: {
         display: 'flex',
         justifyContent: 'center',
@@ -858,14 +856,15 @@ const styles = {
     },
     section5: {
         backgroundColor: '#035541',
-        marginTop: '3%'
+        marginTop: '3%',
+
     },
     section5Text1: {
         color: 'white',
         textAlign: 'center',
         fontSize: 28,
         fontWeight: 'bold',
-        padding: 18
+        padding: 10
     },
     section5Text2: {
         color: 'white',
@@ -905,7 +904,7 @@ const styles = {
         fontWeight: 'bold',
         marginBottom: '4%',
     },
-    teamName:{
+    teamName: {
         fontSize: '20px',
         fontWeight: 'bold',
         margin: '4%',
@@ -913,7 +912,7 @@ const styles = {
     teamDescription: {
         fontSize: '16px',
         color: '#666666',
-        fontWeight:'500',
+        fontWeight: '500',
         margin: '4%',
     },
     subteamDescription: {
