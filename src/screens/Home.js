@@ -645,7 +645,7 @@ const styles = {
         borderBottom: '1px solid #E0E0E0',
         display: 'flex',
         flexDirection: 'row',
-        padding: '0 20px',
+        padding: '0 10px',
     },
     companyName: {
         fontSize: 22,
@@ -657,9 +657,7 @@ const styles = {
         fontSize: 16,
         fontWeight: 'bold',
         color: 'white',
-        marginRight: 16,
         backgroundColor: 'red',
-        padding: '8px 20px',
         textAlign: 'center',
         borderRadius: '20px',
         border: 'none',
@@ -671,7 +669,6 @@ const styles = {
         fontWeight: 'bold',
         fontSize: 17,
         color: 'white',
-        padding: '12px',
     },
     section1: {
         display: 'flex',
