@@ -1,67 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { PREFERRED_HOSPITAL } from './api'; // Assuming this imports the correct endpoint
 import axios from 'axios';
+import { PREFERRED_HOSPITAL } from './api';
 
 function PreferredHospitalsScreen() {
     const [preferredHospitals, setPreferredHospitals] = useState([]);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetchPreferredHospitals(); // Fetch hospitals when the component mounts
-    }, []);
+        const fetchPreferredHospitals = async () => {
+            try {
+                const token = localStorage.getItem('token');
 
-    const fetchPreferredHospitals = async () => {
-        try {
-            const token = localStorage.getItem('token');
-
-            if (!token) {
-                console.error('Token is missing');
-                setError('Token is missing');
-                return;
-            }
-
-            console.log('Token:', token);
-
-            const response = await axios.get(PREFERRED_HOSPITAL, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                if (!token) {
+                    console.error('Token is missing');
+                    setError('Token is missing');
+                    return;
                 }
-            });
+    
+                console.log('Token:', token);
+                const response = await axios.get(PREFERRED_HOSPITAL, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+                console.log('Response:', response);
 
-            console.log('Response:', response); // Log the full response for further inspection
-
-            if (response.status === 200) {
-                if (response.data.data && response.data.data.preferredHospitals) {
+                if (response.data.code === 200) {
                     setPreferredHospitals(response.data.data.preferredHospitals);
                 } else {
-                    console.warn('No preferred hospitals data found in response');
-                    setPreferredHospitals([]);
+                    setError(response.data.message);
                 }
-            } else {
-                console.error('Unexpected response status:', response.status, response.data);
-                setError(`Failed to fetch preferred hospitals: ${response.status}`);
+            } catch (err) {
+                console.error('Error fetching preferred hospitals:', err);
+                if (err.response) {
+                   
+                    console.error('Response data:', err.response.data);
+                    console.error('Response status:', err.response.status);
+                    console.error('Response headers:', err.response.headers);
+                } else if (err.request) {
+                    // Request was made but no response was received
+                    console.error('Request data:', err.request);
+                } else {
+                    // Something else caused the error
+                    console.error('Error message:', err.message);
+                }
+                setError('An error occurred while fetching the preferred hospitals.');
             }
-        } catch (error) {
-            if (error.response) {
-                // The request was made and the server responded with a status code that falls out of the range of 2xx
-                console.error('Error response data:', error.response.data);
-                console.error('Error response status:', error.response.status);
-                console.error('Error response headers:', error.response.headers);
-                setError(`Failed to fetch preferred hospitals: ${error.response.status}`);
-            } else if (error.request) {
-                // The request was made but no response was received
-                console.error('Error request:', error.request);
-                setError('Failed to fetch preferred hospitals: No response received');
-            } else {
-                // Something happened in setting up the request that triggered an Error
-                console.error('Error message:', error.message);
-                setError(`Failed to fetch preferred hospitals: ${error.message}`);
-            }
-            console.error('Error config:', error.config);
-        }
-    };
-    
+        };
+
+        fetchPreferredHospitals();
+    }, []);
+
     return (
         <div>
             <h2>Preferred Hospitals</h2>

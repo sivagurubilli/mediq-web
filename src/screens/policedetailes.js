@@ -1,13 +1,16 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { POLICE_DETAILS } from './api';
+import { LoadScript, Autocomplete } from '@react-google-maps/api';
 
 function ServiceDetail() {
-    const { slug } = useParams();
+    const { id } = useParams();
     const [serviceDetail, setServiceDetail] = useState(null);
     const [userLocation, setUserLocation] = useState(null);
+    const [searchLocation, setSearchLocation] = useState(null);
     const [error, setError] = useState(null);
+    const [autocomplete, setAutocomplete] = useState(null);
 
     useEffect(() => {
         const fetchServiceDetail = async () => {
@@ -16,42 +19,40 @@ function ServiceDetail() {
                 setError('No authorization token found');
                 return;
             }
-            if (window.location.protocol!== 'https:' && window.location.hostname!== 'localhost') {
-                setError('Geolocation is only available in secure contexts (HTTPS) or on localhost');
-                return;
-            }
+
             try {
-                // Fetch user's current geolocation
-                navigator.geolocation.getCurrentPosition(async (position) => {
-                    const { latitude, longitude } = position.coords;
-                    setUserLocation({ latitude, longitude });
+                // Fetch user's geolocation using Google Maps Geolocation API
+                const googleGeolocationEndpoint = `https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyCLg_Oahf9q1keNmJoqHc_Uk4f0fu3YmxU`;
 
-                    // Construct API endpoint with latitude and longitude
-                    const apiEndpoint = `${POLICE_DETAILS}/${latitude}/${longitude}`;
+                const geolocationResponse = await axios.post(googleGeolocationEndpoint);
+                const { lat: latitude, lng: longitude } = geolocationResponse.data.location;
+                setUserLocation({ latitude, longitude });
 
-                    const response = await axios.get(apiEndpoint, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
+                // If searchLocation is set, use it as userLocation
+                const finalLocation = searchLocation || { latitude, longitude };
 
-                    if (response.status !== 200) {
-                        console.error('HTTP error! Status:', response.status);
-                        throw new Error(`HTTP error! Status: ${response.status}`);
+                // Construct API endpoint with id, latitude, and longitude
+                const apiEndpoint = POLICE_DETAILS(id, finalLocation.latitude, finalLocation.longitude);
+                console.log(apiEndpoint)
+                const response = await axios.get(apiEndpoint, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
                     }
-
-                    const data = response.data;
-                    if (data.code === 200) {
-                        setServiceDetail(data.data.listing[0]);
-                        console.error('response:', response.data);
-                    } else {
-                        throw new Error(`API error! Code: ${data.code}`);
-                    }
-                }, (error) => {
-                    setError(`Error retrieving geolocation: ${error.message}`);
-                    console.error('Geolocation error:', error);
                 });
+
+                if (response.status !== 200) {
+                    console.error('HTTP error! Status:', response.status);
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = response.data;
+                if (data.code === 200 && data.data.listing.length > 0) {
+                    setServiceDetail(data.data.listing[0]);
+                    console.log(data.data)
+                } else {
+                    setError('No police station found at the specified location');
+                }
             } catch (error) {
                 setError(error.message);
                 console.error('Error fetching data:', error);
@@ -59,14 +60,49 @@ function ServiceDetail() {
         };
 
         fetchServiceDetail();
-    }, [slug]);
+    }, [id, searchLocation]);
+
+    const handleLoad = (autocompleteInstance) => {
+        setAutocomplete(autocompleteInstance);
+    };
+
+    const handlePlaceChanged = () => {
+        if (autocomplete !== null) {
+            const place = autocomplete.getPlace();
+            if (place.geometry) {
+                const latitude = place.geometry.location.lat();
+                const longitude = place.geometry.location.lng();
+                setSearchLocation({ latitude, longitude });
+            }
+        } else {
+            console.log('Autocomplete is not loaded yet!');
+        }
+    };
 
     const handleDirectionsClick = () => {
-        if (userLocation && serviceDetail) {
-            const { latitude: userLat, longitude: userLng } = userLocation;
+        if (serviceDetail) {
+            let originLat, originLng;
+            
+            if (searchLocation) {
+                originLat = searchLocation.latitude;
+                originLng = searchLocation.longitude;
+            } else if (userLocation) {
+                originLat = userLocation.latitude;
+                originLng = userLocation.longitude;
+            } else {
+                setError('Could not determine user location');
+                return;
+            }
+            
             const { latitude: policeLat, longitude: policeLng } = serviceDetail;
-            const directionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${policeLat},${policeLng}&travelmode=driving`;
+            const directionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${policeLat},${policeLng}&travelmode=driving`;
             window.open(directionsUrl, '_blank');
+        }
+    };
+
+    const handleCallClick = () => {
+        if (serviceDetail && serviceDetail.phone) {
+            window.location.href = `tel:${serviceDetail.phone}`;
         }
     };
 
@@ -80,6 +116,17 @@ function ServiceDetail() {
 
     return (
         <div style={styles.container}>
+            <div style={styles.searchBar}>
+                <LoadScript googleMapsApiKey="AIzaSyCLg_Oahf9q1keNmJoqHc_Uk4f0fu3YmxU" libraries={["places"]}>
+                    <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
+                        <input
+                            type="text"
+                            placeholder="Search for a location"
+                            style={styles.searchInput}
+                        />
+                    </Autocomplete>
+                </LoadScript>
+            </div>
             <div style={styles.cardContent}>
                 <h2 style={styles.cardTitle}>{serviceDetail.name}</h2>
                 <p style={styles.cardDescription}>{serviceDetail.address_line1}</p>
@@ -87,9 +134,14 @@ function ServiceDetail() {
                 <p style={styles.cardDescription}>
                     Phone: <a href={`tel:${serviceDetail.phone}`} style={styles.phoneLink}>{serviceDetail.phone}</a>
                 </p>
-                <button style={styles.directionButton} onClick={handleDirectionsClick}>
-                    Get Directions 🧭
-                </button>
+                <div style={styles.buttonRow}>
+                    <button style={styles.directionButton} onClick={handleDirectionsClick}>
+                        Get Directions 🧭
+                    </button>
+                    <button style={styles.callButton} onClick={handleCallClick}>
+                        Call ☎️
+                    </button>
+                </div>
             </div>
         </div>
     );
@@ -103,6 +155,18 @@ const styles = {
         minHeight: '100vh',
         backgroundColor: '#D3FFD8',
         padding: 20,
+    },
+    searchBar: {
+        width: '100%',
+        maxWidth: 600,
+        marginBottom: 20,
+    },
+    searchInput: {
+        width: '100%',
+        padding: 10,
+        fontSize: 16,
+        borderRadius: 5,
+        border: '1px solid #ccc',
     },
     cardContent: {
         borderRadius: 6,
@@ -129,7 +193,6 @@ const styles = {
         fontWeight: 'bold',
     },
     directionButton: {
-        marginTop: 20,
         padding: '10px 20px',
         fontSize: 16,
         color: '#fff',
@@ -137,6 +200,20 @@ const styles = {
         border: 'none',
         borderRadius: 5,
         cursor: 'pointer',
+        marginRight: 10,
+    },
+    callButton: {
+        padding: '10px 20px',
+        fontSize: 16,
+        color: '#fff',
+        backgroundColor: '#28a745',
+        border: 'none',
+        borderRadius: 5,
+        cursor: 'pointer',
+    },
+    buttonRow: {
+        display: 'flex',
+        marginTop: 20,
     }
 };
 

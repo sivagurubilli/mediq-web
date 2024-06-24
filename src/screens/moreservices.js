@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GET_LISTING_TYPE } from './api'; 
 import axios from 'axios';
+import { GET_LISTING_TYPE } from './api'; 
 
 function Moreservices() {
     const navigate = useNavigate();
@@ -46,23 +46,8 @@ function Moreservices() {
     }, []);
 
     const handleCardClick = (id, slug) => {
-        switch(id) {
-            case 1:
-                navigate('/police');
-                break;
-            case 2:
-                navigate('/fire-stations');
-                break;
-            case 3:
-                navigate('/blood-banks');
-                break;
-            case 4:
-                navigate('/mortuaries');
-                break;
-            default:
-                navigate(`/service/${slug}`);
-        }
-    }
+        navigate(`/service-detail/${id}/${slug}`);
+    };
 
     if (error) {
         return <div style={styles.errorContainer}>Error: {error}</div>;

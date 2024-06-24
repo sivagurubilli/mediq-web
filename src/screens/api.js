@@ -9,6 +9,6 @@ export const BOOKING_BY_BOOKINGID = (id) => `${BASE_URL}/booking/${id}`;
 export const BOOKING_UPDATE = (id) => `${BASE_URL}/get-booking-update/${id}`;
 export const CANCEL_BOOKING = `${BASE_URL}/cancel-booking`;
 export const GET_LISTING_TYPE = `${BASE_URL}/get-listing-type`;
-export const POLICE_DETAILS = `${BASE_URL}/listing-type/1`;
+export const POLICE_DETAILS = (id, latitude, longitude) => `${BASE_URL}/listing-type/${id}/${latitude}/${longitude}`;
 export const PREFERRED_HOSPITAL = `${BASE_URL}/get-preferred-hospital`;
-// export const BOOKING_BY_BOOKINGID= `${BASE_URL}/booking/LYF-D0KSFU0TXC1FOEXR2OO0`;
+

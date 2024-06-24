@@ -5,7 +5,7 @@ import Geocode from 'react-geocode';
 import { EMERGENCY_BOOK, BOOKING_BY_BOOKINGID, CANCEL_BOOKING } from './api';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-Geocode.setApiKey('YOUR_GOOGLE_API_KEY'); // Replace with your actual API key
+Geocode.setApiKey('AIzaSyCLg_Oahf9q1keNmJoqHc_Uk4f0fu3YmxU'); // Replace with your actual API key
 
 const containerStyle = {
   width: '100%',
@@ -87,6 +87,32 @@ const MapScreen = () => {
     }
   }, [bookingId, refreshInterval, isCanceled]);
 
+  // const getUserLocation = () => {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (position) => {
+  //         const { latitude, longitude } = position.coords;
+  //         setRegion({
+  //           lat: latitude,
+  //           lng: longitude,
+  //           zoom: 15,
+  //         });
+  //         setMarkerPosition({
+  //           lat: latitude,
+  //           lng: longitude,
+  //         });
+  //         fetchAddress(latitude, longitude).then(address => setCurrentAddress(address));
+  //       },
+  //       (error) => {
+  //         console.error(error);
+  //         setCurrentAddress('Error fetching location');
+  //       }
+  //     );
+  //   } else {
+  //     console.log('Geolocation is not supported by this browser.');
+  //   }
+  // };
+
   const getUserLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -101,7 +127,7 @@ const MapScreen = () => {
             lat: latitude,
             lng: longitude,
           });
-          fetchAddress(latitude, longitude).then(address => setCurrentAddress(address));
+          fetchAddress(latitude, longitude).then((address) => setCurrentAddress(address));
         },
         (error) => {
           console.error(error);
@@ -112,6 +138,7 @@ const MapScreen = () => {
       console.log('Geolocation is not supported by this browser.');
     }
   };
+  
 
   const fetchAddress = async (latitude, longitude) => {
     try {
@@ -377,7 +404,7 @@ const MapScreen = () => {
       <div style={styles.header}>
         <h1 style={styles.title}>{selectedButton}</h1>
       </div>
-      <LoadScript googleMapsApiKey="YOUR_GOOGLE_API_KEY" libraries={libraries}>
+      <LoadScript googleMapsApiKey="AIzaSyCLg_Oahf9q1keNmJoqHc_Uk4f0fu3YmxU" libraries={libraries}>
         <Autocomplete
           onLoad={(autocomplete) => (autocompleteRef.current = autocomplete)}
           onPlaceChanged={onPlaceChanged}

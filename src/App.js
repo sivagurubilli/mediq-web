@@ -23,7 +23,7 @@ function App() {
         <Route path="/SelectEmergency" element={<EmergencyScreen />} />
         <Route path="/map" element={<Map />} />
         <Route path="/driver" element={<DriverScreen />} />
-        <Route path="/police" element={<ServiceDetail />} />
+        <Route path="/service-detail/:id/:slug" element={<ServiceDetail />} />
         <Route path="/YourPreferred" element={<PreferredHospitalsScreen />} />
       </Routes>
     </Router>

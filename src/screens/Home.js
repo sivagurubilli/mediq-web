@@ -231,7 +231,7 @@ const Home = () => {
 
             <Container>
                 <div>
-                    <h3 style={styles.section2Text1}>FEATURES</h3>
+                    <h3 style={styles.section2Text1}>SERVICES</h3>
                     <h4 style={styles.section2Text2}>Experience Our Distinctive Traits</h4>
                     <p style={styles.section2Text3}>Experience the future of emergency medical transport with LYFGUARD. Your lifeline, our priority.</p>
                 </div>
