@@ -87,58 +87,33 @@ const MapScreen = () => {
     }
   }, [bookingId, refreshInterval, isCanceled]);
 
-  // const getUserLocation = () => {
-  //   if (navigator.geolocation) {
-  //     navigator.geolocation.getCurrentPosition(
-  //       (position) => {
-  //         const { latitude, longitude } = position.coords;
-  //         setRegion({
-  //           lat: latitude,
-  //           lng: longitude,
-  //           zoom: 15,
-  //         });
-  //         setMarkerPosition({
-  //           lat: latitude,
-  //           lng: longitude,
-  //         });
-  //         fetchAddress(latitude, longitude).then(address => setCurrentAddress(address));
-  //       },
-  //       (error) => {
-  //         console.error(error);
-  //         setCurrentAddress('Error fetching location');
-  //       }
-  //     );
-  //   } else {
-  //     console.log('Geolocation is not supported by this browser.');
-  //   }
-  // };
-
   const getUserLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setRegion({
-            lat: latitude,
-            lng: longitude,
-            zoom: 15,
-          });
-          setMarkerPosition({
-            lat: latitude,
-            lng: longitude,
-          });
-          fetchAddress(latitude, longitude).then((address) => setCurrentAddress(address));
-        },
-        (error) => {
-          console.error(error);
-          setCurrentAddress('Error fetching location');
-        }
-      );
-    } else {
-      console.log('Geolocation is not supported by this browser.');
-    }
-  };
-  
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setRegion({
+          lat: latitude,
+          lng: longitude,
+          zoom: 15,
+        });
+        setMarkerPosition({
+          lat: latitude,
+          lng: longitude,
+        });
+        fetchAddress(latitude, longitude).then((address) => setCurrentAddress(address));
+      },
+      (error) => {
+        console.error('Error fetching location:', error);
+        setCurrentAddress('Error fetching location');
+      }
+    );
+  } else {
+    console.log('Geolocation is not supported by this browser.');
+    setCurrentAddress('Geolocation is not supported');
+  }
+};
+
 
   const fetchAddress = async (latitude, longitude) => {
     try {
@@ -303,34 +278,26 @@ const MapScreen = () => {
           if (booking.status === 3) {
             setLoading(false);
             setIntervalActive(false); // Stop interval on success
-            setRefreshInterval(true); // Start the 30-second interval after status 3
+            setRefreshInterval(false); // Stop the second interval
+            console.log('Booking status is 3');
             navigate('/driver', {
               state: {
                 bookingId: booking.booking_id,
-                driverName: booking.driverName,
-                driverPhone: booking.driverPhone,
+                driverName: booking.driver_name,
+                driverPhone: booking.driver_phone,
                 vehicleNumber: booking.vehicle_number,
-                emergencyTypeName: booking.emergencyTypeName,
+                emergencyTypeName: booking.emergency_type_name,
                 selectedButton: selectedButton,
               }
             });
-          } else if (booking.status === 2) {
-            console.log('Booking is stopped');
-          } else if (booking.status === 8 || booking.status === 10) {
-            setShowModal(true);
-            setIntervalActive(false); // Stop interval on cancellation
-          }else if (booking.status === 9) {
-            console.log('Booking status is 9, stopping requests.');
-            setIntervalActive(false); // Stop interval on status 9
-          } 
-           else {
-            console.warn('Unknown status:', booking.status);
+          } else {
+            console.log('Booking status is not 3:', booking.status);
           }
         } else {
-          console.error('API response does not contain booking_id');
+          console.log('No booking ID found in response');
         }
       } else {
-        console.warn('No data found for the given booking ID');
+        console.log('No data found in booking details response');
       }
     } catch (error) {
       console.error('Error fetching booking details:', error);
@@ -343,36 +310,39 @@ const MapScreen = () => {
     setBookingId(null);
   };
 
-  const handleCancelBooking = async () => {
+
+  const cancelBooking = async () => {
+    if (!bookingId || isCanceled) return; // Stop if already canceled or no booking ID
+
     try {
       const token = localStorage.getItem('token');
-      const url = CANCEL_BOOKING;
-      const response = await axios.post(
-        url,
-        {
-          booking_id: bookingId,
-          reason: 'Test'
+      if (!token) {
+        throw new Error('Authorization token not found');
+      }
+
+      const url = CANCEL_BOOKING(bookingId);
+      console.log('Canceling booking with URL:', url);
+
+      const response = await axios.post(url, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-      console.log('Cancel booking response:', response.data);
-      const canceledBookingId = response.data.booking_id; // Extract the booking ID from the response
-      console.log('Canceled Booking ID:', canceledBookingId); // Print the canceled booking ID
-      console.log('Booking Cancel Successfuly');
-      setLoading(false);
-      setIntervalActive(false);
-      setShowModal(false);
+      });
+
+      if (response.data.success) {
+        console.log('Booking successfully canceled');
+        setIsCanceled(true); // Mark as canceled
+        setLoading(false);
+        setIntervalActive(false); // Stop interval on cancel
+        setRefreshInterval(false); // Stop the second interval
+      } else {
+        console.log('Failed to cancel booking');
+      }
     } catch (error) {
-      console.error('Error cancelling booking:', error);
-      alert('Failed to cancel the booking. Please try again.');
+      console.error('Error canceling booking:', error);
     }
   };
   
-
   return (
     <div style={styles.container}>
       {loading && (
@@ -383,7 +353,7 @@ const MapScreen = () => {
           </div>
           <button
             style={{ ...styles.cancelbutton, ...styles.secondaryButton }}
-            onClick={handleCancelBooking}
+            onClick={cancelBooking}
           >
             CANCEL BOOKING
           </button>
@@ -396,7 +366,7 @@ const MapScreen = () => {
             <p>Booking has been cancelled. Please try again.</p>
             <div style={styles.buttonContainer}>
               <button style={styles.modelbutton} onClick={() => navigate('/YourPreferred')}>SHOW PREFERRED</button>
-              <button style={{ ...styles.modelbutton, ...styles.secondaryButton }} onClick={handleCancelBooking}>BACK TO HOME</button>
+              <button style={{ ...styles.modelbutton, ...styles.secondaryButton }} onClick={cancelBooking}>BACK TO HOME</button>
             </div>
           </div>
         </div>

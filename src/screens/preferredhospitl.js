@@ -56,7 +56,9 @@ function PreferredHospitalsScreen() {
         <div>
             <h2>Preferred Hospitals</h2>
             {error ? (
-                <p>Error: {error}</p>
+                <p></p>
+                // <p>Error: {error}</p>
+
             ) : (
                 preferredHospitals.length > 0 ? (
                     <ul>
