@@ -90,7 +90,12 @@ const OTPScreen = () => {
             <button style={styles.buttonStyle} onClick={handleVerifyOTP}>
               Verify OTP
             </button>
+            <img 
+          src={require('./assets/applelogo.png')}
+          alt="Apple Logo" style={styles.otherLoginImage} />
           </div>
+
+         
         </div>
       </div>
     </div>
@@ -155,7 +160,15 @@ const styles = {
   buttonContainer: {
     display: 'flex',
     justifyContent: 'center',
-    margin: '20%'
+    margin: '20%',
+    flexDirection:'column'
+  },
+  otherLoginImage: {
+    width: "40%",
+    height: 20,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: '8%',
   },
 };
 

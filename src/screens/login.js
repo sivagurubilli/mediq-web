@@ -65,9 +65,11 @@ const BookingScreen = () => {
           <div style={styles.buttonContainer}>
             <button style={styles.buttonStyle} onClick={handleSubmit}>GET OTP</button>
           </div>
-          <p style={styles.bottomText}>Having issues? Click here</p>
+          <a style={styles.bottomText}>Having issues? Click here</a>
           <p style={styles.subBottomText}>Other Login Options</p>
-          <img src="/screens/assets/applelogo.png" alt="Apple Logo" style={styles.otherLoginImage} />
+          <img
+            src={require('./assets/applelogo.png')}
+            alt="Apple Logo" style={styles.otherLoginImage} />
         </div>
       </div>
       <style jsx="true">{`
@@ -118,12 +120,12 @@ const styles = {
     textAlign: 'center',
   },
   text: {
-    fontSize: 35,
+    fontSize: "250%",
     fontWeight: 'bold',
     color: 'white',
   },
   subText: {
-    fontSize: 22,
+    fontSize: "150%",
     fontWeight: '300',
     color: 'white',
     marginBottom: '15%',
@@ -141,7 +143,7 @@ const styles = {
     background: 'none',
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: "120%",
     padding: '8px 20px',
   },
   inputStyle: {
@@ -158,13 +160,13 @@ const styles = {
   },
   errorText: {
     color: 'yellow',
-    fontSize:15
+    fontSize: "100%"
   },
   bottomText: {
     marginTop: '18%',
     color: 'white',
     textAlign: 'center',
-    fontSize: 15,
+    fontSize: "100%",
   },
   subBottomText: {
     marginTop: '7%',
@@ -172,8 +174,8 @@ const styles = {
     textAlign: 'center',
   },
   otherLoginImage: {
-    width: 20,
-    height: 20,
+    width: "40%",
+    height: 25,
     marginLeft: 'auto',
     marginRight: 'auto',
     marginTop: '8%',

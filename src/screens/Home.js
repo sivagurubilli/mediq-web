@@ -1,5 +1,5 @@
 // src/Home.js
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
 import 'slick-carousel/slick/slick.css';
@@ -10,11 +10,12 @@ const Home = () => {
     const [isHovered, setIsHovered] = useState(false);
     const [isBooked, setIsBooked] = useState(false);
     const [hoveredStates, setHoveredStates] = useState([false, false, false]);
-    const [hoveredMenuItem, setHoveredMenuItem] = useState(null);
-    const [hoveredButton, setHoveredButton] = useState(null);
-    const [isToggleOpen, setIsToggleOpen] = useState(false);
     const [showMore, setShowMore] = useState(false);
     const [showMores, setShowMores] = useState(false);
+    const [isToggleOpen, setIsToggleOpen] = useState(false);
+    const [hoveredMenuItem, setHoveredMenuItem] = useState(null);
+    const [hoveredButton, setHoveredButton] = useState(null);
+    const [isScrolled, setIsScrolled] = useState(false);
 
     const sliderRef = useRef(null);
     const overViewRef = useRef(null);
@@ -47,20 +48,12 @@ const Home = () => {
         setHoveredStates(updatedHoveredStates);
     };
 
-    const handleMouseEnterMenu = (item) => {
-        setHoveredMenuItem(item);
-    };
+    const handleMouseEnterMenu = (item) => setHoveredMenuItem(item);
+    const handleMouseLeaveMenu = () => setHoveredMenuItem(null);
 
-    const handleMouseLeaveMenu = () => {
-        setHoveredMenuItem(null);
-    };
-    const handleMouseEnterbutton = (button) => {
-        setHoveredButton(button);
-    };
+    const handleMouseEnterbutton = (button) => setHoveredButton(button);
+    const handleMouseLeavesbutton = () => setHoveredButton(null);
 
-    const handleMouseLeavesbutton = () => {
-        setHoveredButton(null);
-    };
 
 
     const toggleShowMore = () => {
@@ -70,6 +63,23 @@ const Home = () => {
     const toggleShowMoreExplorebooking = () => {
         setShowMores(!showMores);
     };
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollTop = window.scrollY;
+            if (scrollTop > 50) {
+                setIsScrolled(true);
+            } else {
+                setIsScrolled(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
 
     const settings = {
@@ -85,8 +95,8 @@ const Home = () => {
     return (
 
         <div style={styles.container}>
-            <Navbar bg="dark" variant="dark" expand="md sm lg " style={styles.appBar}>
-                <Navbar.Brand style={styles.companyName}>LyfGuard </Navbar.Brand>
+            <Navbar expand="md sm lg" style={styles.appBar} className={isScrolled ? 'fixed-top' : ''}>
+                <Navbar.Brand style={styles.companyName}>LYFGUARD</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setIsToggleOpen(!isToggleOpen)} />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className={`mr-auto ${isToggleOpen ? 'bg-primary position-relative' : ''}`} style={isToggleOpen ? { zIndex: 1000 } : {}}>
@@ -98,7 +108,7 @@ const Home = () => {
                                     ...styles.menuItem,
                                     textDecoration: hoveredMenuItem === item ? 'underline' : 'none',
                                     color: hoveredMenuItem === item ? '#FFBB37' : 'white',
-                                    backgroundColor: isToggleOpen ? 'rgba(0, 0, 0, 0.8)' : 'transparent', // Transparent background color
+                                    backgroundColor: isToggleOpen ? 'rgba(0, 0, 0, 0.8)' : 'transparent',
                                 }}
                                 onMouseEnter={() => handleMouseEnterMenu(item)}
                                 onMouseLeave={handleMouseLeaveMenu}
@@ -141,7 +151,7 @@ const Home = () => {
                                 color: hoveredButton === 'Sign Up' ? 'black' : 'white',
                                 backgroundColor: isToggleOpen === 'Sign Up' ? 'red' : '#FFBB37',
                                 color: isToggleOpen === 'Sign Up' ? 'black' : 'red',
-                                marginLeft: '5px', // Adjust margin for spacing
+                                marginLeft: '5px',
                             }}
                             onMouseEnter={() => handleMouseEnterbutton('Sign Up')}
                             onMouseLeave={handleMouseLeavesbutton}
@@ -150,10 +160,14 @@ const Home = () => {
                         </Button>
                     </Nav>
                 </Navbar.Collapse>
-
             </Navbar>
 
             <section style={styles.section1}>
+                <img
+                    src={require('./assets/LyfGurad-white-logo.png')} // Replace with your image path
+                    alt="Top Left"
+                    style={styles.topLeftImage}
+                />
                 <div style={styles.text}>
                     <h2 style={styles.section1Text1}>LYFGUARD: Your Lifeline, Our Priority</h2>
                     <p style={styles.section1Text2}>Zero-cost, lightning fast ambulance Service</p>
@@ -460,10 +474,11 @@ const Home = () => {
 
             <Container>
                 <div ref={teamRef}>
-                    <p style={styles.section2Text1}>Meat Our Team</p>
+                    <p style={styles.section2Text1}>Meet Our Team</p>
                     <p style={styles.section2Text3}>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
                 </div>
             </Container>
+
             <Container fluid style={styles.cardContainer}>
                 <Row>
                     <Col lg={3} md={6} sm={12}>
@@ -681,7 +696,14 @@ const styles = {
         backgroundSize: 'auto',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-
+    },
+    topLeftImage: {
+        position: 'absolute',
+        top: '10%',
+        left: '2%',
+        width: '100px', // Adjust the width as needed
+        height: 'auto',
+        zIndex: 1,
     },
     text: {
         flex: 1,
@@ -738,7 +760,7 @@ const styles = {
         fontSize: 22,
         fontWeight: '600',
     },
-    
+
     slide: {
         display: 'flex',
         justifyContent: 'center',
