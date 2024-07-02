@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Navbar, Nav, Button, Container, Row, Col } from 'react-bootstrap';
+import axios from 'axios';
+import { LOGOUT } from './api';
 
 const Home = () => {
     const [isHovered, setIsHovered] = useState(false);
@@ -54,8 +56,6 @@ const Home = () => {
     const handleMouseEnterbutton = (button) => setHoveredButton(button);
     const handleMouseLeavesbutton = () => setHoveredButton(null);
 
-
-
     const toggleShowMore = () => {
         setShowMore(!showMore);
     };
@@ -90,6 +90,44 @@ const Home = () => {
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 1000,
+    };
+
+    const handleLogout = async () => {
+        try {
+            const token =  localStorage.getItem('token');
+            if (!token) {
+                console.error('No authorization token found');
+                
+                return;
+            } // Replace with the actual token
+
+            try {
+                const response = await axios.get(LOGOUT, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.status !== 200) {
+                    console.error('HTTP error! Status:', response.status);
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = response.data;
+                if (data.code === 200) {
+                    console.log('Logout successful', response.data);
+                } else {
+                    throw new Error(`API error! Code: ${data.code}`);
+                }
+            } catch (error) {
+                console.error('Logout failed', error);
+            }
+           
+        } catch (error) {
+            // Handle error (e.g., show error message)
+            
+        }
     };
 
     return (
@@ -135,8 +173,7 @@ const Home = () => {
                                 ...styles.joinUsButton,
                                 backgroundColor: hoveredButton === 'Join Now' ? '#FFBB37' : 'red',
                                 color: hoveredButton === 'Join Now' ? 'black' : 'white',
-                                backgroundColor: isToggleOpen === 'Join Now' ? 'red' : '#FFBB37',
-                                color: isToggleOpen === 'Join Now' ? 'black' : 'red',
+
                             }}
                             onMouseEnter={() => handleMouseEnterbutton('Join Now')}
                             onMouseLeave={handleMouseLeavesbutton}
@@ -149,14 +186,26 @@ const Home = () => {
                                 ...styles.joinUsButton,
                                 backgroundColor: hoveredButton === 'Sign Up' ? '#FFBB37' : 'red',
                                 color: hoveredButton === 'Sign Up' ? 'black' : 'white',
-                                backgroundColor: isToggleOpen === 'Sign Up' ? 'red' : '#FFBB37',
-                                color: isToggleOpen === 'Sign Up' ? 'black' : 'red',
+
                                 marginLeft: '5px',
                             }}
                             onMouseEnter={() => handleMouseEnterbutton('Sign Up')}
                             onMouseLeave={handleMouseLeavesbutton}
                         >
                             SIGN UP
+                        </Button>
+                        <Button
+                           onClick={handleLogout}
+                            style={{
+                                ...styles.joinUsButton,
+                                backgroundColor: hoveredButton === 'LogOut' ? '#FFBB37' : 'red',
+                                color: hoveredButton === 'LogOut' ? 'black' : 'white',
+                                marginLeft: '5px',
+                            }}
+                            onMouseEnter={() => handleMouseEnterbutton('LogOut')}
+                            onMouseLeave={handleMouseLeavesbutton}
+                        >
+                            LOG OUT
                         </Button>
                     </Nav>
                 </Navbar.Collapse>
@@ -604,13 +653,13 @@ const Home = () => {
             </Container>
 
             <Container fluid style={styles.Section8container}>
-                <Row >
-                    {/* <img
-                        src={require('./assets/LyfGuardLogo.png')}
-                        style={styles.footerlogo}
-                        alt="LyfGuard Logo"
-                    /> */}
-                    <Col xs={12} md={3} lg={3} >
+                <Row>
+                    <img
+                        src={require('./assets/LyfGurad-white-logo.png')} // Replace with your image path
+                        alt="Top Left"
+                        style={styles.bottomRight}
+                    />
+                    <Col xs={12} md={3} lg={3}>
 
                         <p style={styles.Section8text}>Contact</p>
                         <div style={styles.section8subtext}>
@@ -619,7 +668,7 @@ const Home = () => {
                             <p style={styles.Section8textsub}>'1800-889-1258'</p>
                         </div>
                     </Col>
-                    <Col xs={12} md={3} lg={3} >
+                    <Col xs={12} md={3} lg={3}>
                         <p style={styles.Section8text}>Services</p>
                         <div style={styles.section8subtext}>
                             <p style={styles.Section8textsub}>Emergency Ambulance</p>
@@ -660,13 +709,13 @@ const styles = {
         borderBottom: '1px solid #E0E0E0',
         display: 'flex',
         flexDirection: 'row',
-        padding: '0 10px',
+        padding: '20 10px',
     },
     companyName: {
         fontSize: 22,
         fontWeight: 'bold',
         color: 'white',
-        marginRight: '23%'
+        marginRight: '25%'
     },
     joinUsButton: {
         fontSize: 16,
@@ -700,7 +749,7 @@ const styles = {
     topLeftImage: {
         position: 'absolute',
         top: '10%',
-        left: '2%',
+        right: '2%',
         width: '100px', // Adjust the width as needed
         height: 'auto',
         zIndex: 1,
@@ -952,6 +1001,7 @@ const styles = {
         justifyContent: 'center',
     },
     Section8container: {
+        position: 'relative',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -980,6 +1030,14 @@ const styles = {
     footerlogo: {
         width: '10%',
         height: 'auto',
+    },
+    bottomRight:{
+        position: 'absolute',
+        top: '10%',
+        left: '2%',
+        width: '100px', // Adjust the width as needed
+        height: 'auto',
+        zIndex: 1,
     }
 };
 

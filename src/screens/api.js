@@ -11,4 +11,5 @@ export const CANCEL_BOOKING = `${BASE_URL}/cancel-booking`;
 export const GET_LISTING_TYPE = `${BASE_URL}/get-listing-type`;
 export const POLICE_DETAILS = (id, latitude, longitude) => `${BASE_URL}/listing-type/${id}/${latitude}/${longitude}`;
 export const PREFERRED_HOSPITAL = `${BASE_URL}/get-preferred-hospital`;
+export const LOGOUT = `${BASE_URL}/logout`;
 
