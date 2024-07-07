@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { GET_LISTING_TYPE } from './api';
+import { GET_FIRSTAID_CATEGORY } from './api';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 
-function Moreservices() {
+function FirstAidservices() {
     const navigate = useNavigate();
     const [services, setServices] = useState([]);
     const [error, setError] = useState(null);
@@ -16,24 +16,24 @@ function Moreservices() {
                 setError('No authorization token found');
                 return;
             }
-
+    
             try {
-                const response = await axios.get(GET_LISTING_TYPE, {
+                const response = await axios.get(GET_FIRSTAID_CATEGORY, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     }
                 });
-
+    
                 if (response.status !== 200) {
                     console.error('HTTP error! Status:', response.status);
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-
+    
                 const data = response.data;
                 if (data.code === 200) {
-                    setServices(data.data.types);
-                    console.error('response:', data);
+                    setServices(data.data.firstAidCategories);
+                    console.log('response:', data);
                 } else {
                     throw new Error(`API error! Code: ${data.code}`);
                 }
@@ -42,12 +42,13 @@ function Moreservices() {
                 console.error('Error fetching data:', error);
             }
         };
-
+    
         fetchData();
     }, []);
+    
 
     const handleCardClick = (id, slug) => {
-        navigate(`/service-detail/${id}/${slug}`);
+        navigate(`/firstaidservice/${id}/${slug}`);
     };
 
     if (error) {
@@ -59,13 +60,13 @@ function Moreservices() {
             <Row className="justify-content-center">
                 {services.map(service => (
                     <Col key={service.id} xs={12} sm={6} md={4} lg={3} style={styles.cardContainer}>
-                        <Card className="mb-4" style={{ borderRadius: '15px' }} onClick={() => handleCardClick(service.id, service.slug)}>
+                        <Card className="mb-4" style={{ borderRadius: '15px' }} onClick={() => handleCardClick(service.id,service.slug)}>
                             <Card.Body>
                                 <Card.Title>{service.name}</Card.Title>
                                 <Card.Text>Click here for {service.name}.</Card.Text>
                                 <div style={styles.getstartContainer}>
-                                <Button style={styles.getStartedButton}>Book Now!</Button>
-                            </div>
+                                    <Button style={styles.getStartedButton}>Book Now!</Button>
+                                </div>
                             </Card.Body>
                         </Card>
                     </Col>
@@ -87,7 +88,7 @@ const styles = {
     },
     cardContainer: {
         cursor: 'pointer',
-        borderRadius:10
+        borderRadius: 10
     },
     errorContainer: {
         color: 'red',
@@ -106,8 +107,8 @@ const styles = {
         backgroundColor: 'transparent',
         cursor: 'pointer',
         marginBottom: '3%',
-        color:'black'
+        color: 'black'
     },
 };
 
-export default Moreservices;
+export default FirstAidservices;

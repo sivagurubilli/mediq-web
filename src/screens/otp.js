@@ -27,7 +27,11 @@ const OTPScreen = () => {
       const enteredOTP = otp.join('');
       console.log('Sending OTP verification request', { phone, otp: enteredOTP, fcm_token: 'hh' });
 
-      const response = await axios.post(LOGIN_API, { phone, otp: enteredOTP, fcm_token: 'hh' });
+      const response = await axios.post(LOGIN_API, { 
+        phone, 
+        otp: enteredOTP, 
+        fcm_token: 'hh' 
+      });
 
        // Log the full response
        console.log('Full API response:', response);
@@ -72,6 +76,11 @@ const OTPScreen = () => {
     <div style={styles.container}>
       <div style={styles.cardContainer}>
         <div style={styles.card}>
+        <img
+                    src={require('./assets/LyfGurad-white-logo.png')} // Replace with your image path
+                    alt="Top Left"
+                    style={styles.topLeftImage}
+                />
           <h1 style={styles.text}>Enter OTP</h1>
           <div style={styles.otpInputContainer}>
             {[0, 1, 2, 3].map(index => (
@@ -134,6 +143,14 @@ const styles = {
     fontWeight: 'bold',
     color: 'white',
   },
+  topLeftImage: {
+    position: 'absolute',
+    top: '5%',
+    right: '3%',
+    width: '50px', // Adjust the width as needed
+    height: 'auto',
+    zIndex: 1,
+},
   otpInputContainer: {
     display: 'flex',
     justifyContent: 'center',

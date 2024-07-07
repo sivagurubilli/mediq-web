@@ -88,7 +88,11 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         minHeight: '100vh',
-        backgroundColor: '#D3FFD8',
+        backgroundColor: '#066951',
+        backgroundImage: `url(${require('./assets/LyfGuardLogo.png')})`,
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: '600px 600px',
         padding: 20,
     },
     buttonsContainer: {
@@ -114,7 +118,7 @@ const styles = {
         bottom: 0,
         left: 0,
         padding: 20,
-        backgroundColor: '#D3FFD8',
+        backgroundColor: '#066951',
         boxSizing: 'border-box',
     },
     proceedButton: {

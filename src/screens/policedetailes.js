@@ -153,7 +153,11 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'center',
         minHeight: '100vh',
-        backgroundColor: '#D3FFD8',
+        backgroundColor: '#066951',
+        backgroundImage: `url(${require('./assets/LyfGuardLogo.png')})`,
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: '600px 600px',
         padding: 20,
     },
     searchBar: {

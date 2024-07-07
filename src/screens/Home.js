@@ -1,14 +1,14 @@
 // src/Home.js
 import React, { useState, useRef, useEffect } from 'react';
 import Slider from 'react-slick';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Navbar, Nav, Button, Container, Row, Col } from 'react-bootstrap';
-import axios from 'axios';
-import { LOGOUT } from './api';
+
 
 const Home = () => {
+    const navigate = useNavigate();
     const [isHovered, setIsHovered] = useState(false);
     const [isBooked, setIsBooked] = useState(false);
     const [hoveredStates, setHoveredStates] = useState([false, false, false]);
@@ -92,43 +92,7 @@ const Home = () => {
         autoplaySpeed: 1000,
     };
 
-    const handleLogout = async () => {
-        try {
-            const token =  localStorage.getItem('token');
-            if (!token) {
-                console.error('No authorization token found');
-                
-                return;
-            } // Replace with the actual token
-
-            try {
-                const response = await axios.get(LOGOUT, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.status !== 200) {
-                    console.error('HTTP error! Status:', response.status);
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
-                const data = response.data;
-                if (data.code === 200) {
-                    console.log('Logout successful', response.data);
-                } else {
-                    throw new Error(`API error! Code: ${data.code}`);
-                }
-            } catch (error) {
-                console.error('Logout failed', error);
-            }
-           
-        } catch (error) {
-            // Handle error (e.g., show error message)
-            
-        }
-    };
+    
 
     return (
 
@@ -168,7 +132,7 @@ const Home = () => {
                     </Nav>
                     <Nav className={`ml-auto align-items-center ${isToggleOpen ? 'd-flex flex-row justify-content-center position-relative' : 'd-flex'}`} style={isToggleOpen ? { zIndex: 1000 } : {}}>
                         <Button
-                            onClick={() => { }}
+                            onClick={() => navigate('/join')}
                             style={{
                                 ...styles.joinUsButton,
                                 backgroundColor: hoveredButton === 'Join Now' ? '#FFBB37' : 'red',
@@ -178,7 +142,7 @@ const Home = () => {
                             onMouseEnter={() => handleMouseEnterbutton('Join Now')}
                             onMouseLeave={handleMouseLeavesbutton}
                         >
-                            JOIN NOW
+                            JOIN US!
                         </Button>
                         <Button
                             onClick={() => { }}
@@ -192,21 +156,9 @@ const Home = () => {
                             onMouseEnter={() => handleMouseEnterbutton('Sign Up')}
                             onMouseLeave={handleMouseLeavesbutton}
                         >
-                            SIGN UP
+                            CLIENT SIGN UP
                         </Button>
-                        <Button
-                           onClick={handleLogout}
-                            style={{
-                                ...styles.joinUsButton,
-                                backgroundColor: hoveredButton === 'LogOut' ? '#FFBB37' : 'red',
-                                color: hoveredButton === 'LogOut' ? 'black' : 'white',
-                                marginLeft: '5px',
-                            }}
-                            onMouseEnter={() => handleMouseEnterbutton('LogOut')}
-                            onMouseLeave={handleMouseLeavesbutton}
-                        >
-                            LOG OUT
-                        </Button>
+                       
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
@@ -405,6 +357,7 @@ const Home = () => {
             </Container>
 
             <Container fluid ref={overViewRef} style={styles.section3}>
+               <Col>
                 <Row className="align-items-center">
                     <Col xs={12} md={6} sm={6} className="text-center text-md-start" style={styles.text}>
                         <img
@@ -450,10 +403,6 @@ const Home = () => {
                         alt="Master Image"
                     />
                 </Row>
-
-            </Container>
-
-            <Container fluid style={styles.section4}>
                 <Row className="align-items-center">
                     <img
                         src={require('./assets/masterimage2.png')}
@@ -500,6 +449,7 @@ const Home = () => {
 
                     </Col>
                 </Row>
+                </Col> 
             </Container>
 
             <div style={styles.section5}>
@@ -799,7 +749,7 @@ const styles = {
         zIndex: 1,
         width: '50%',
         objectFit: 'contain',
-        height: 440,
+        height: 500,
         resizeMode: 'contain',
     },
     ourpartners: {
@@ -875,7 +825,11 @@ const styles = {
         display: 'flex',
         flexDirection: 'row',
         marginTop: '4%',
-        backgroundColor: '#035541',
+        backgroundColor: '#066951',
+        backgroundImage: `url(${require('./assets/LyfGuardLogo.png')})`,
+        backgroundSize: 'auto',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -915,17 +869,9 @@ const styles = {
         background: 'none',
         fontSize: 15
     },
-    section4: {
-        display: 'flex',
-        flexDirection: 'row',
-        backgroundColor: '#035541',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     section5: {
-        backgroundColor: '#035541',
-        marginTop: '3%',
-
+        backgroundColor: '#066951',
+       marginTop:'0.1%'
     },
     section5Text1: {
         color: 'white',
@@ -989,7 +935,11 @@ const styles = {
         margin: '4%',
     },
     section7: {
-        backgroundColor: '#035541',
+        backgroundColor: '#066951',
+        backgroundImage: `url(${require('./assets/LyfGuardLogo.png')})`,
+        backgroundSize: '200px',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
     },
     section7Text2: {
         color: 'white',

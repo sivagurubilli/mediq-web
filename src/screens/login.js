@@ -48,6 +48,11 @@ const BookingScreen = () => {
     <div style={styles.container}>
       <div style={styles.cardContainer}>
         <div style={styles.card}>
+        <img
+                    src={require('./assets/LyfGurad-white-logo.png')} // Replace with your image path
+                    alt="Top Left"
+                    style={styles.topLeftImage}
+                />
           <h1 style={styles.text}>Sign In</h1>
           <p style={styles.subText}>Enter your mobile number</p>
           <div>
@@ -119,16 +124,24 @@ const styles = {
     backdropFilter: 'blur(10px)',
     textAlign: 'center',
   },
+  topLeftImage: {
+    position: 'absolute',
+    top: '5%',
+    right: '3%',
+    width: '70px', // Adjust the width as needed
+    height: 'auto',
+    zIndex: 1,
+},
   text: {
     fontSize: "250%",
     fontWeight: 'bold',
     color: 'white',
   },
   subText: {
-    fontSize: "150%",
+    fontSize: 25,
     fontWeight: '300',
     color: 'white',
-    marginBottom: '15%',
+    marginBottom: '5%',
     textAlign: 'center',
   },
   buttonContainer: {

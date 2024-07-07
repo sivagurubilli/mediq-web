@@ -12,4 +12,6 @@ export const GET_LISTING_TYPE = `${BASE_URL}/get-listing-type`;
 export const POLICE_DETAILS = (id, latitude, longitude) => `${BASE_URL}/listing-type/${id}/${latitude}/${longitude}`;
 export const PREFERRED_HOSPITAL = `${BASE_URL}/get-preferred-hospital`;
 export const LOGOUT = `${BASE_URL}/logout`;
-
+export const UPDATE_PROFILE = `${BASE_URL}/update-profile`;
+export const GET_FIRSTAID_CATEGORY = `${BASE_URL}/get-firstaid-category`;
+export const GET_FIRSTAID_CATEGORY_BYID = (id) => `${BASE_URL}/get-firstaid-category/${id}`;
