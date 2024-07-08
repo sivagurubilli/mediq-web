@@ -171,7 +171,7 @@ const Home = () => {
                 />
                 <div style={styles.text}>
                     <h2 style={styles.section1Text1}>LYFGUARD: Your Lifeline, Our Priority</h2>
-                    <p style={styles.section1Text2}>Zero-cost, lightning fast ambulance Service</p>
+                    <p style={styles.section1Text2}>Free, fast-response ambulance service.</p>
                     <div style={styles.bookambulanceButton}>
                         <Link to="/booking" >
                             <button
@@ -247,7 +247,7 @@ const Home = () => {
             <Container>
                 <div>
                     <h3 style={styles.section2Text1}>SERVICES</h3>
-                    <h4 style={styles.section2Text2}>Experience Our Distinctive Traits</h4>
+                    <h4 style={styles.section2Text2}>Discover Our Exceptional Features</h4>
                     <p style={styles.section2Text3}>Experience the future of emergency medical transport with LYFGUARD. Your lifeline, our priority.</p>
                 </div>
             </Container>
@@ -268,7 +268,7 @@ const Home = () => {
                                 style={styles.cardlogo}
                             />
                             <h3 style={{ ...styles.cardTitle, color: hoveredStates[0] ? '#FFFFFF' : '#000000' }}  >Citywide Hospital partnerships</h3>
-                            <p style={{ ...styles.cardDescription, color: hoveredStates[0] ? '#FFFFFF' : '#000000' }}>Strategic Alliances with Private City Hospitals, Guaranteeing Seamless Patient Transfers.</p>
+                            <p style={{ ...styles.cardDescription, color: hoveredStates[0] ? '#FFFFFF' : '#000000' }}>Collaborating with City Hospitals for easy and seamless patient transfers.</p>
                         </div>
                     </Col>
                     <Col lg={4} md={6} sm={12}>
@@ -285,7 +285,7 @@ const Home = () => {
                                 style={styles.cardlogo}
                             />
                             <h3 style={{ ...styles.cardTitle, color: hoveredStates[1] ? '#FFFFFF' : '#000000' }}>Instant Ambulance</h3>
-                            <p style={{ ...styles.cardDescription, color: hoveredStates[1] ? '#FFFFFF' : '#000000' }}>Summoning a private ambulance is now as swift and straightforward as booking a ride.</p>
+                            <p style={{ ...styles.cardDescription, color: hoveredStates[1] ? '#FFFFFF' : '#000000' }}>Booking a private ambulance is now as quick and easy as ordering a ride.</p>
                         </div>
                     </Col>
                     <Col lg={4} md={6} sm={12}>
@@ -302,7 +302,7 @@ const Home = () => {
                                 style={styles.cardlogo}
                             />
                             <h3 style={{ ...styles.cardTitle, color: hoveredStates[2] ? '#FFFFFF' : '#000000' }}>Zero-cost</h3>
-                            <p style={{ ...styles.cardDescription, color: hoveredStates[2] ? '#FFFFFF' : '#000000' }}>Instantly Reserve Budget-Friendly, Non-Critical Ambulance Services.</p>
+                            <p style={{ ...styles.cardDescription, color: hoveredStates[2] ? '#FFFFFF' : '#000000' }}>Instantly book Budget-Friendly Ambulance Services.</p>
                         </div>
                     </Col>
                     <Col lg={4} md={6} sm={12}>
@@ -318,7 +318,8 @@ const Home = () => {
                                 style={styles.cardlogo}
                             />
                             <h3 style={{ ...styles.cardTitle, color: hoveredStates[3] ? '#FFFFFF' : '#000000' }}>Emergency connect</h3>
-                            <p style={{ ...styles.cardDescription, color: hoveredStates[3] ? '#FFFFFF' : '#000000' }}>Located nearby hospitals, access Police and Fire department contact effortlessly.</p>
+                            <p style={{ ...styles.cardDescription, color: hoveredStates[3] ? '#FFFFFF' : '#000000' }}>Easily access nearby hospitals and contact the Police and Fire departments.
+                            </p>
                         </div>
                     </Col>
                     <Col lg={4} md={6} sm={12}>
@@ -334,7 +335,7 @@ const Home = () => {
                                 style={styles.cardlogo}
                             />
                             <h3 style={{ ...styles.cardTitle, color: hoveredStates[4] ? '#FFFFFF' : '#000000' }}>Mobile integrated healthcare</h3>
-                            <p style={{ ...styles.cardDescription, color: hoveredStates[4] ? '#FFFFFF' : '#000000' }}>Comprehensive first aid videos guiding you through emergency situations.</p>
+                            <p style={{ ...styles.cardDescription, color: hoveredStates[4] ? '#FFFFFF' : '#000000' }}>Sneak Peek into Future Medical Actions and Protocols</p>
                         </div>
                     </Col>
                     <Col lg={4} md={6} sm={12}>
@@ -365,8 +366,8 @@ const Home = () => {
                             style={styles.cardlogo2}
                             alt="Care Logo"
                         />
-                        <p style={styles.section3Text1}>Your journey towards instant care just a click away-</p>
-                        <p style={styles.section3Text2}>
+                        <p style={styles.section3Text1}>Your journey towards instant care is just a click away-</p>
+                        {/* <p style={styles.section3Text2}>
                             Collaborate over projects with your team and clients optimized for mobile and tablet.
                         </p>
                         <Button style={styles.moreButton} onClick={toggleShowMore}>
@@ -379,9 +380,8 @@ const Home = () => {
                             ) : (
                                 'See More...'
                             )}
-                        </Button>
+                        </Button> */}
 
-                        <div style={styles.getstartContainer}>
                             <Button
                                 style={{
                                     ...styles.downloadnowButton,
@@ -394,8 +394,6 @@ const Home = () => {
                             >
                                 DOWNLOAD NOW!
                             </Button>
-                        </div>
-
                     </Col>
                     <img
                         src={require('./assets/masterimage2.png')}
@@ -417,9 +415,8 @@ const Home = () => {
                             alt="Booking Options Logo"
                         />
 
-
                         <p style={styles.section3Text1}>Explore the booking options now</p>
-                        <p style={styles.section3Text2}>
+                        {/* <p style={styles.section3Text2}>
                             Collaborate over projects with your team and clients optimized for mobile and tablet.
                         </p>
                         <Button style={styles.moreButton} onClick={toggleShowMoreExplorebooking}>
@@ -430,9 +427,8 @@ const Home = () => {
                             ) : (
                                 'See More...'
                             )}
-                        </Button>
-
-                        <div style={styles.getstartContainer}>
+                        </Button> */}
+                       
                             <Button
                                 style={{
                                     ...styles.downloadnowButton,
@@ -445,8 +441,6 @@ const Home = () => {
                             >
                                 DOWNLOAD NOW!
                             </Button>
-                        </div>
-
                     </Col>
                 </Row>
                 </Col> 
@@ -478,7 +472,7 @@ const Home = () => {
                 </div>
             </Container>
 
-            <Container fluid style={styles.cardContainer}>
+            <Container style={styles.cardContainer}>
                 <Row>
                     <Col lg={3} md={6} sm={12}>
                         <div
@@ -747,9 +741,9 @@ const styles = {
     },
     bannerimg: {
         zIndex: 1,
-        width: '50%',
         objectFit: 'contain',
         height: 500,
+        width:'50%',
         resizeMode: 'contain',
     },
     ourpartners: {
@@ -840,9 +834,9 @@ const styles = {
     },
     section3Text1: {
         color: 'white',
-        fontSize: 28,
+        fontSize: '170%',
         fontWeight: '900',
-        marginBottom: '4%',
+        // marginBottom: '4%',
         marginTop: '4%',
     },
     section3Text2: {
@@ -903,7 +897,6 @@ const styles = {
     cardContainerSection2: {
         display: 'flex',
         flexDirection: 'row',
-        padding: '2%',
     },
     cardsction2: {
         width: '100%',
@@ -911,7 +904,6 @@ const styles = {
         padding: '5%',
         marginBottom: '3%',
         boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-        marginRight: '5%'
     },
     cardTitle: {
         fontSize: '16px',
@@ -921,18 +913,15 @@ const styles = {
     teamName: {
         fontSize: '20px',
         fontWeight: 'bold',
-        margin: '4%',
     },
     teamDescription: {
         fontSize: '16px',
         color: '#666666',
         fontWeight: '500',
-        margin: '4%',
     },
     subteamDescription: {
         fontSize: '14px',
         color: '#666666',
-        margin: '4%',
     },
     section7: {
         backgroundColor: '#066951',
