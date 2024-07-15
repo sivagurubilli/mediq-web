@@ -8,6 +8,7 @@ function Moreservices() {
     const navigate = useNavigate();
     const [services, setServices] = useState([]);
     const [error, setError] = useState(null);
+    const [hoveredCard, setHoveredCard] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -50,6 +51,14 @@ function Moreservices() {
         navigate(`/service-detail/${id}/${slug}`);
     };
 
+    const handleMouseEnterCard = (cardId) => {
+        setHoveredCard(cardId);
+    };
+
+    const handleMouseLeaveCard = () => {
+        setHoveredCard(null);
+    };
+
     if (error) {
         return <div style={styles.errorContainer}>Error: {error}</div>;
     }
@@ -58,14 +67,35 @@ function Moreservices() {
         <Container fluid style={styles.container}>
             <Row className="justify-content-center">
                 {services.map(service => (
-                    <Col key={service.id} xs={12} sm={6} md={4} lg={3} style={styles.cardContainer}>
-                        <Card className="mb-4" style={{ borderRadius: '15px' }} onClick={() => handleCardClick(service.id, service.slug)}>
+                    <Col
+                        key={service.id}
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        lg={3}
+                        style={styles.cardContainer}
+                        onMouseEnter={() => handleMouseEnterCard(service.id)}
+                        onMouseLeave={handleMouseLeaveCard}
+                    >
+                        <Card
+                            className="mb-4"
+                            style={styles.card}
+                            onClick={() => handleCardClick(service.id, service.slug)}
+                        >
                             <Card.Body>
                                 <Card.Title>{service.name}</Card.Title>
                                 <Card.Text>Click here for {service.name}.</Card.Text>
                                 <div style={styles.getstartContainer}>
-                                <Button style={styles.getStartedButton}>Book Now!</Button>
-                            </div>
+                                    <Button
+                                        style={{
+                                            ...styles.getStartedButton,
+                                            backgroundColor: hoveredCard === service.id ? 'green' : '#052769',
+                                            color: 'white',
+                                        }}
+                                    >
+                                        Book Now!
+                                    </Button>
+                                </div>
                             </Card.Body>
                         </Card>
                     </Col>
@@ -87,7 +117,12 @@ const styles = {
     },
     cardContainer: {
         cursor: 'pointer',
-        borderRadius:10
+    },
+    card: {
+        width: '100%',
+        borderRadius: 15,
+        border: '2px solid white',
+        background: 'linear-gradient(135deg, #F0F0F0, #F0F0F0, #5A9A8A)',
     },
     errorContainer: {
         color: 'red',
@@ -102,11 +137,11 @@ const styles = {
         borderRadius: 5,
         textAlign: 'center',
         fontWeight: 500,
-        border: '2px solid #FFBB37',
+        // border: '2px solid #FFBB37',
         backgroundColor: 'transparent',
         cursor: 'pointer',
         marginBottom: '3%',
-        color:'black'
+        color: 'black',
     },
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { POLICE_DETAILS } from './api';
@@ -11,6 +11,11 @@ function ServiceDetail() {
     const [searchLocation, setSearchLocation] = useState(null);
     const [error, setError] = useState(null);
     const [autocomplete, setAutocomplete] = useState(null);
+    const [hoveredButton, setHoveredButton] = useState(null);
+
+
+    const handleMouseEnterbutton = (button) => setHoveredButton(button);
+    const handleMouseLeavesbutton = () => setHoveredButton(null);
 
     useEffect(() => {
         const fetchServiceDetail = async () => {
@@ -33,7 +38,7 @@ function ServiceDetail() {
 
                 // Construct API endpoint with id, latitude, and longitude
                 const apiEndpoint = POLICE_DETAILS(id, finalLocation.latitude, finalLocation.longitude);
-                console.log(apiEndpoint)
+                console.log(apiEndpoint);
                 const response = await axios.get(apiEndpoint, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -49,7 +54,7 @@ function ServiceDetail() {
                 const data = response.data;
                 if (data.code === 200 && data.data.listing.length > 0) {
                     setServiceDetail(data.data.listing[0]);
-                    console.log(data.data)
+                    console.log(data.data);
                 } else {
                     setError('No police station found at the specified location');
                 }
@@ -82,7 +87,7 @@ function ServiceDetail() {
     const handleDirectionsClick = () => {
         if (serviceDetail) {
             let originLat, originLng;
-            
+
             if (searchLocation) {
                 originLat = searchLocation.latitude;
                 originLng = searchLocation.longitude;
@@ -93,7 +98,7 @@ function ServiceDetail() {
                 setError('Could not determine user location');
                 return;
             }
-            
+
             const { latitude: policeLat, longitude: policeLng } = serviceDetail;
             const directionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${policeLat},${policeLng}&travelmode=driving`;
             window.open(directionsUrl, '_blank');
@@ -121,7 +126,7 @@ function ServiceDetail() {
                     <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
                         <input
                             type="text"
-                            placeholder="Search for a location"
+                            placeholder="Search for a Current location"
                             style={styles.searchInput}
                         />
                     </Autocomplete>
@@ -129,17 +134,45 @@ function ServiceDetail() {
             </div>
             <div style={styles.cardContent}>
                 <h2 style={styles.cardTitle}>{serviceDetail.name}</h2>
-                <p style={styles.cardDescription}>{serviceDetail.address_line1}</p>
-                <p style={styles.cardDescription}>{serviceDetail.pincode}</p>
                 <p style={styles.cardDescription}>
-                    Phone: <a href={`tel:${serviceDetail.phone}`} style={styles.phoneLink}>{serviceDetail.phone}</a>
+                    <img src={require('./assets/location.png')} alt="Profile/Register" style={styles.Icon} />
+                    {serviceDetail.address_line1},     {serviceDetail.pincode}
+                </p>
+
+                <p style={styles.cardDescription}>
+                    <a href={`tel:${serviceDetail.phone}`} style={styles.phoneLink}>
+                        <img src={require('./assets/phone.png')} alt="Profile/Register" style={styles.Icon} />
+                        {serviceDetail.phone}</a>
                 </p>
                 <div style={styles.buttonRow}>
-                    <button style={styles.directionButton} onClick={handleDirectionsClick}>
-                        Get Directions 🧭
+                    <button
+                        onClick={handleDirectionsClick}
+                        style={{
+                            ...styles.Button,
+                            backgroundColor: hoveredButton === 'Direction' ? 'green' : '#F4A338',
+                            color: hoveredButton === 'Direction' ? 'white' : 'white',
+
+                        }}
+                        onMouseEnter={() => handleMouseEnterbutton('Direction')}
+                        onMouseLeave={handleMouseLeavesbutton}
+
+                    >
+                        Get Directions
+                        <img src={require('./assets/Direction.png')} alt="Profile/Register" style={styles.Icon} />
                     </button>
-                    <button style={styles.callButton} onClick={handleCallClick}>
-                        Call ☎️
+                    <button
+                        onClick={handleCallClick}
+                        style={{
+                            ...styles.Button,
+                            backgroundColor: hoveredButton === 'Call' ? 'green' : '#F4A338',
+                            color: hoveredButton === 'Call' ? 'white' : 'white',
+
+                        }}
+                        onMouseEnter={() => handleMouseEnterbutton('Call')}
+                        onMouseLeave={handleMouseLeavesbutton}
+                    >
+                        Call
+                        <img src={require('./assets/Call.png')} alt="Profile/Register" style={styles.Icon} />
                     </button>
                 </div>
             </div>
@@ -173,20 +206,31 @@ const styles = {
         border: '1px solid #ccc',
     },
     cardContent: {
-        borderRadius: 6,
-        padding: '7%',
-        backgroundColor: '#FFF',
+        borderRadius: 15,
+        padding: '4%',
+        // width: '40%',
+        background: 'linear-gradient(135deg, #EEEEEE,#EEEEEE, #F4A338)',
         boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+        border: '3px solid white',
+        
     },
     cardTitle: {
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 700,
         marginBottom: '1%',
         color: 'black',
     },
     cardDescription: {
-        fontSize: 15,
+        fontSize: 18,
         color: 'black',
+    },
+    Icon: {
+        marginRight: 10,
+        marginLeft: 10,
+        marginBottom:5,
+        width: 18,
+        height: 18,
+        verticalAlign: 'middle',
     },
     phoneLink: {
         color: '#007BFF',
@@ -196,25 +240,18 @@ const styles = {
         color: 'red',
         fontWeight: 'bold',
     },
-    directionButton: {
+    Button: {
         padding: '10px 20px',
-        fontSize: 16,
+        fontSize: 20,
         color: '#fff',
-        backgroundColor: '#007BFF',
+        // backgroundColor: '#F4A338',
         border: 'none',
-        borderRadius: 5,
+        borderRadius: 15,
         cursor: 'pointer',
-        marginRight: 10,
+        marginRight: 20,
+        fontWeight: '600'
     },
-    callButton: {
-        padding: '10px 20px',
-        fontSize: 16,
-        color: '#fff',
-        backgroundColor: '#28a745',
-        border: 'none',
-        borderRadius: 5,
-        cursor: 'pointer',
-    },
+
     buttonRow: {
         display: 'flex',
         marginTop: 20,
