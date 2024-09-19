@@ -1,0 +1,49 @@
+/* mapComponent.css */
+.map-background {
+  background-color: rgb(6, 105, 81); /* Set background color */
+  background-image: url('../screens/assets/LyfGuardLogo.png'); /* Adjust the path to your image */
+  background-size: cover; /* Ensure the image covers the entire container */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Prevent repeating the image */
+  min-height: 100vh; /* Ensure the background covers the full viewport height */
+ 
+}
+
+.map-container {
+  padding: 10px; /* Adjust padding as needed */
+  margin-right: 2%;
+  
+  
+}
+
+.custom-form {
+  padding: 0px; /* Adjust padding to reduce form height */
+  border-radius: 0px; /* Keep the border radius */
+  overflow: hidden; /* Maintain overflow settings */
+  border: none; /* Remove any border */
+  box-shadow: none; /* Remove shadow effects */
+  background-color: white; /* Background color remains white */
+  transition: none; /* Disable any hover transitions */
+}
+
+.ambulance-item {
+  text-decoration: none !important; /* Remove underline from text */
+  color: inherit; /* Maintain the current text color */
+}
+
+.ambulance-item:hover {
+  background-color: transparent; /* Prevent background color change on hover */
+  text-decoration: none; /* Remove underline on hover */
+}
+
+.custom-form:hover {
+  background-color: white; /* Prevent color change on hover */
+}
+/* Add this rule to your CSS file */
+.rounded-div {
+  border-radius: 5px; /* Adjust the value to your preferred border radius */
+  overflow: hidden; /* Ensures that content does not overflow the rounded corners */
+}
+/* Base styles for larger screens */
+
+/* Styles for Android screens (smaller screens) */

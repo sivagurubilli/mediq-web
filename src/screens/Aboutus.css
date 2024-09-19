@@ -1,0 +1,43 @@
+.about-us {
+  background-color: rgb(6, 105, 81); /* Background color */
+  background-image: url('./assets/LyfGuardLogo.png'); /* Background image */
+  background-size: cover; /* Ensures the image covers the entire div */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  color: white; /* Text color */
+  padding: 20px; /* Adds padding inside the div */
+  text-align: center; /* Centers the text */
+  height: 200px; /* Set the height you need */
+}
+.card{
+ 
+  margin-bottom: 10%;
+}
+.overlay-img {
+  top: 10%;
+  left: 10%;
+  transform: translate(-5%, -5%);
+}
+.movable-card {
+  width: 100%;
+  position: relative;
+  margin: 0 auto;
+  animation: move 10s infinite alternate ease-in-out;
+  transition: transform 0.5s ease-in-out;
+}
+
+.movable-card:hover {
+  transform: scale(1.05);
+}
+
+@keyframes move {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

@@ -2,18 +2,36 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { LOGIN_API } from './api';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Modal from './modal'
 
 const OTPScreen = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [phone, setPhone] = useState('');
   const [otp, setOTP] = useState(['', '', '', '']);
+  const [modalVisible, setModalVisible] = useState(false);
   const otpInputRef = useRef([null, null, null, null]);
+  const [otpPopupVisible, setOtpPopupVisible] = useState(false); // State to manage OTP popup visibility
+  const [fromEmergency, setFromEmergency] = useState(false); // State to handle emergency flow
+  const [MapComponent, setMapComponent] = useState(false);
 
   useEffect(() => {
-    if (location.state && location.state.phone) {
-      setPhone(location.state.phone);
+    if (location.state) {
+      setPhone(location.state.phone || '');
+      setFromEmergency(location.state.fromEmergency || false);
+      setMapComponent(location.state.mapComponent|| false);      
     }
+    if (location.state?.fromEmergency) {
+      setModalVisible(true);
+      setFromEmergency(true); //
+    } 
+    else if (location.state?.MapComponent){
+      
+      setMapComponent(true); //
+    }
+    console.log('Phone:', location.state?.phone);
+    console.log('fromEmergency:', location.state?.fromEmergency);
+   
   }, [location.state]);
 
   const handleVerifyOTP = async () => {
@@ -22,6 +40,12 @@ const OTPScreen = () => {
       alert('Phone number is missing. Please try again.');
       return;
     }
+    if (otp.some(val => val === '')) {
+      alert('Please enter all OTP digits.');
+      return;
+    }
+    var route = localStorage.getItem("routee")
+    
 
     try {
       const enteredOTP = otp.join('');
@@ -40,7 +64,19 @@ const OTPScreen = () => {
       localStorage.setItem('token', token);
 
       setOTP(['', '', '', '']);
-      navigate('/services'); // Navigate to the Services page
+     
+      if (fromEmergency) {
+        setOtpPopupVisible(true); // Show the OTP popup if fromEmergency is true
+        return;
+      }
+      if(fromEmergency) {
+  
+        navigate('/private');
+        return
+      } else if(MapComponent){
+        navigate('/services');
+        return;
+      }
     } catch (error) {
       if (error.response) {
         console.error('Error response data:', error.response.data);
@@ -64,13 +100,23 @@ const OTPScreen = () => {
       newOTP[index] = value;
       setOTP(newOTP);
 
-      if (index < 3 && value !== '') {
+      if (value !== '' && index < 3) {
         otpInputRef.current[index + 1]?.focus();
-      } else if (index > 0 && value === '') {
+      } else if (value === '' && index > 0) {
         otpInputRef.current[index - 1]?.focus();
       }
+  
+     
     }
   };
+    
+  const handleOtpPopupConfirm = () => {
+    setOtpPopupVisible(false);
+    handleVerifyOTP(); // Proceed with OTP verification
+  };
+  
+  
+  
 
   return (
     <div style={styles.container}>
@@ -107,6 +153,14 @@ const OTPScreen = () => {
          
         </div>
       </div>
+      {otpPopupVisible && (
+        <Modal 
+          modalVisible={otpPopupVisible} 
+          setModalVisible={setOtpPopupVisible}
+          onConfirm={handleOtpPopupConfirm}
+        />
+      )}
+       
     </div>
   );
 };

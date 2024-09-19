@@ -1,0 +1,118 @@
+/* BasicAmbulance.css */
+
+
+.map-background {
+  background-color: rgb(6, 105, 81);
+}
+
+.sticky-map {
+  position: relative;
+  height: 100vh;
+  margin-right: 2%;
+  margin-top: 5%;
+  margin-bottom: 4%;
+  
+}
+
+.font-size-small {
+  font-size: 12px;
+  color: #4F4F4F;
+ 
+}
+
+.styled-card {
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.styled-form-label {
+  font-size: 11px;
+
+  color: #4F4F4F;
+  margin-right: 10px;
+}
+
+.styled-form-control {
+  font-size: 12px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.styled-button {
+  font-size: 12px;
+  
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+.submit-button {
+  font-size: 12px;
+  padding: 10px;
+  
+}
+
+
+/* Container style */
+.card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.key {
+  color: #4F4F4F;
+  
+  font-weight: bold;
+  font-size: 11px;
+ /* Fixed width for alignment */
+  
+}
+
+
+/* styles.css */
+.styled-card {
+  border-radius: 3px; /* Adjust the radius as needed */
+  overflow: hidden; /* Ensures the border radius is applied to content */
+}
+.datapickup{
+  color: black;
+  font-size: 11px;
+  display: inline-block;
+  margin-left: 20px;
+
+}
+.datadrop{
+  color: black;
+  font-size: 11px;
+  display: inline-block;
+  margin-left: 27px;
+
+}
+.dataamenity{
+  color: black;
+  font-size: 11px;
+  display: inline-block;
+  margin-left: 17px;
+
+}
+.datafare{
+  color: black;
+  font-size: 11px;
+  display: inline-block;
+  margin-left: 32px;
+
+}
+.image{
+  margin-left: 40%;
+}
+
+
+
+
+

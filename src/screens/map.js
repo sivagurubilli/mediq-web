@@ -489,7 +489,6 @@ const styles = {
     textAlign: 'center',
     backgroundColor: 'green',
     color: 'white',
-    fontWeight: 'bold',
     cursor: 'pointer',
     fontSize: '18px',
     fontWeight: 'bold'

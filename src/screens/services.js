@@ -44,7 +44,7 @@ function ServiceScreen() {
                     </div>
                 </Col>
 
-                <Col xs={12} sm={6} md={4} style={styles.cardContainer} onClick={() => navigate('/SomeScreen')}>
+                <Col xs={12} sm={6} md={4} style={styles.cardContainer} onClick={() => navigate('/private')}>
                     <div style={styles.gradient}>
                         <Row style={styles.cardContent}>
                            

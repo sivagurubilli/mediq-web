@@ -11,7 +11,7 @@ const ProfileScreen = () => {
     const [hoveredButton, setHoveredButton] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [avatar, setAvatar] = useState(null); // State to store user's profile picture
-    const [uploaded, setUploaded] = useState(false); // State to track if picture is uploaded
+    const [setUploaded] = useState(false); // State to track if picture is uploaded
 
     const handleMouseEnterButton = (button) => setHoveredButton(button);
     const handleMouseLeaveButton = () => setHoveredButton(null);

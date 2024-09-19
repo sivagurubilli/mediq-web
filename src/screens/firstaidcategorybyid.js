@@ -6,7 +6,7 @@ import { GET_FIRSTAID_CATEGORY_BYID } from './api';
 import { Container, Card, Button } from 'react-bootstrap';
 
 function FirstAidServiceDetail() {
-    const { id, slug } = useParams();
+    const { id,  } = useParams();
     const [service, setService] = useState(null);
     const [error, setError] = useState(null);
     const [showVideo, setShowVideo] = useState(false);
@@ -64,7 +64,7 @@ function FirstAidServiceDetail() {
                     <Card.Title>{service.title}</Card.Title>
                     <Card.Text>{service.description}</Card.Text>
                     {showVideo ? (
-                        <ReactPlayer
+                        <ReactPlayer 
                             url={service.video_link}
                             controls
                             width="100%"

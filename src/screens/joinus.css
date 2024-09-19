@@ -1,0 +1,23 @@
+/* .custom-joinus-container {
+  max-width: 100vw;
+  padding: 2rem;
+  background-color: rgb(6, 105, 81);
+  background-image: url('../screens/assets/LyfGuardLogo.png');
+  background-size: cover;
+  background-position: center;
+  font-style: 'roboto';
+} */
+
+.custom-card {
+  margin-bottom: 2rem;
+}
+
+.center-button {
+  display: flex;
+  justify-content: center;
+}
+
+.submit-button {
+  width: 100%;
+  max-width: 300px;
+}

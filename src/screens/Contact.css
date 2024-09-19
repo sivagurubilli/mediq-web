@@ -1,0 +1,97 @@
+/* Contact.css - Styles specific to the Contact page */
+
+/* Container for the Contact Us page */
+.contact-container {
+  background-color: #ffffff; /* White background */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
+  position: relative;
+  max-width: 700px; /* Adjust the value to your desired width */
+  margin: 0 auto;  
+}
+/* Add this rule to adjust the height of the container */
+
+
+
+/* Content wrapper to adjust padding and margins */
+ .contact-content {
+  margin-top: 5%;
+  margin-bottom: 5%;
+  margin-left: 5%;
+} 
+
+/* Form styling */
+.contact-form {
+  width: 90% !important;
+}
+
+.contact-form-control {
+  border-bottom: 1px solid #ccc; /* Underline style */
+}
+
+.contact-submit-btn {
+  background-color: rgb(6, 105, 81); /* Dark background */
+  color: white;
+  margin-left: 15% !important;
+  margin-bottom: 4%;
+}
+
+.contact-submit-btn:hover,
+.contact-submit-btn:focus,
+.contact-submit-btn:active {
+  background-color: rgb(6, 105, 81) !important;
+  border-color: rgb(6, 105, 81) !important;
+  box-shadow: none !important;
+ 
+}
+
+/* Info section styling */
+.contact-info {
+  margin-right: 0% !important;
+}
+
+.contact-info-bg {
+  background-color: rgb(6, 105, 81); /* Dark background */
+  color: white;
+  padding: 1rem;
+  margin-top: 60%;
+}
+
+/* Body background specific to Contact Us */
+body.contact-page {
+  background-color: #f8f9fa; /* Light grey background */
+}
+
+/* Position adjustments for content */
+.contact-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 25%;
+  background-color:  black;
+  z-index: 1;
+}
+
+.contact-content .row {
+  position: relative;
+  z-index: 2;
+}
+@media (max-width: 768px) {
+  .button-container {
+    display: block; /* Show the button on smaller screens */
+    margin-left: 20%;
+    
+  }
+
+  .contact-form {
+    margin-bottom: 20px; /* Add margin to the form to space it out */
+  }
+  .contact-info-bg {
+    background-color: rgb(6, 105, 81); /* Dark background */
+    color: white;
+    padding: 1rem;
+    margin-top: 10%;
+  }
+}

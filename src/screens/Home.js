@@ -1,43 +1,56 @@
 // src/Home.js
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import Slider from 'react-slick';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, } from 'react-router-dom';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { Navbar, Nav, Button, Container, Row, Col } from 'react-bootstrap';
+import { Button, Container, Row, Col, Overlay } from 'react-bootstrap';
+import FloatingButton from './FloatingButton';
+import Navigation from './navbar';
+import FooterScreen from './footer';
+import { useNavigate } from 'react-router-dom';
 
 
 const Home = () => {
     const navigate = useNavigate();
-    const [isHovered, setIsHovered] = useState(false);
     const [isBooked, setIsBooked] = useState(false);
     const [hoveredStates, setHoveredStates] = useState([false, false, false]);
     const [showMore, setShowMore] = useState(false);
     const [showMores, setShowMores] = useState(false);
-    const [isToggleOpen, setIsToggleOpen] = useState(false);
-    const [hoveredMenuItem, setHoveredMenuItem] = useState(null);
     const [hoveredButton, setHoveredButton] = useState(null);
-    const [isScrolled, setIsScrolled] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
     const sliderRef = useRef(null);
     const overViewRef = useRef(null);
     const teamRef = useRef(null);
     const contactRef = useRef(null);
+    const homeRef = useRef(null);
 
-    const menuItems = ['HOME', 'SERVICES', 'OVERVIEW', 'TEAM', 'CONTACT'];
 
-    const handleBookAmbulance = () => {
-        setIsBooked(true);
+    const getButtonWidth = () => {
+        if (window.matchMedia('(max-width: 600px)').matches) {
+          return '250px'; // Width for small screens
+        }
+        if (window.matchMedia('(min-width: 601px) and (max-width: 1024px)').matches) {
+          return '220px'; // Width for medium screens
+        }
+        return '200px'; // Default width
+      };
+      
+    
+
+    const toggleShowMore = () => {
+        setShowMore(prevShowMore => !prevShowMore);
     };
 
-    const handlePressIn = () => {
-        setIsHovered(true);
+    const toggleShowMoreExplorebooking = () => {
+        setShowMores(prevShowMores => !prevShowMores);
     };
 
-    const handlePressOut = () => {
-        setIsHovered(false);
-    };
 
+    const handleBookNow = () => {
+      };
+    
     const handleMouseEnter = (index) => {
         const updatedHoveredStates = [...hoveredStates];
         updatedHoveredStates[index] = true;
@@ -50,37 +63,11 @@ const Home = () => {
         setHoveredStates(updatedHoveredStates);
     };
 
-    const handleMouseEnterMenu = (item) => setHoveredMenuItem(item);
-    const handleMouseLeaveMenu = () => setHoveredMenuItem(null);
 
     const handleMouseEnterbutton = (button) => setHoveredButton(button);
     const handleMouseLeavesbutton = () => setHoveredButton(null);
 
-    const toggleShowMore = () => {
-        setShowMore(!showMore);
-    };
-
-    const toggleShowMoreExplorebooking = () => {
-        setShowMores(!showMores);
-    };
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollTop = window.scrollY;
-            if (scrollTop > 50) {
-                setIsScrolled(true);
-            } else {
-                setIsScrolled(false);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
-
+    
 
     const settings = {
         dots: true,
@@ -91,91 +78,96 @@ const Home = () => {
         autoplay: true,
         autoplaySpeed: 1000,
     };
-
     
+    
+      const imageStyle = {
+        width: '20px',
+        height: '20px',
+       
+      };
+    
+      const nestedContainerStyle = {
+        position: 'relative',
+        width: '10px', // Adjust size as needed
+        height: '10px', // Adjust size as needed
+        display: 'flex',
+      };
+    
+      
+    
+      const overlayStyle = {
+        opacity: 0.7 // Adjust opacity as needed
+      };
+      const buttonStyle = {
+        backgroundColor: isHovered ? 'orange' : 'red', // Change color on hover
+    color:isHovered ? 'black' : 'white',
+    borderRadius: '25px',
+    paddingRight: '15px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    position: 'relative',
+    marginTop: '30px',
+    boxShadow: 'background-color 0.5s ease',
+   
+  
+   
+    
+      };
+    
+      const imageContainerStyle = {
+        position: 'relative',
+        display: 'flex', // Display images in a stack
+        width: '40px', // Adjust width as needed
+        height: '45px', // Adjust height as needed
+        marginRight: '8px', // Space between images and text
+      };
+    
+      const nestedImageStyle = {
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        width: '100%',
+        height: '100%',
+        objectFit: 'contain', // Ensures images cover the container
+      };
+    
+      
+    
+      const textStyle = {
+       
+        fontWeight: 'bold',
+        fontSize: '15px',
+       
+      };
 
     return (
 
         <div style={styles.container}>
-            <Navbar expand="md sm lg" style={styles.appBar} className={isScrolled ? 'fixed-top' : ''}>
-                <Navbar.Brand style={styles.companyName}>LYFGUARD</Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setIsToggleOpen(!isToggleOpen)} />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className={`mr-auto ${isToggleOpen ? 'bg-primary position-relative' : ''}`} style={isToggleOpen ? { zIndex: 1000 } : {}}>
-                        {menuItems.map((item, index) => (
-                            <Nav.Link
-                                key={index}
-                                href="#"
-                                style={{
-                                    ...styles.menuItem,
-                                    textDecoration: hoveredMenuItem === item ? 'underline' : 'none',
-                                    color: hoveredMenuItem === item ? '#FFBB37' : 'white',
-                                    backgroundColor: isToggleOpen ? 'rgba(0, 0, 0, 0.8)' : 'transparent',
-                                }}
-                                onMouseEnter={() => handleMouseEnterMenu(item)}
-                                onMouseLeave={handleMouseLeaveMenu}
-                                onClick={() => {
-                                    if (item === 'SERVICES') {
-                                        sliderRef.current.scrollIntoView({ behavior: 'smooth' });
-                                    } else if (item === 'OVERVIEW') {
-                                        overViewRef.current.scrollIntoView({ behavior: 'smooth' });
-                                    } else if (item === 'TEAM') {
-                                        teamRef.current.scrollIntoView({ behavior: 'smooth' });
-                                    } else if (item === 'CONTACT') {
-                                        contactRef.current.scrollIntoView({ behavior: 'smooth' });
-                                    }
-                                }}
-                            >
-                                {item}
-                            </Nav.Link>
-                        ))}
-                    </Nav>
-                    <Nav className={`ml-auto align-items-center ${isToggleOpen ? 'd-flex flex-row justify-content-center position-relative' : 'd-flex'}`} style={isToggleOpen ? { zIndex: 1000 } : {}}>
-                        <Button
-                            onClick={() => navigate('/join')}
-                            style={{
-                                ...styles.joinUsButton,
-                                backgroundColor: hoveredButton === 'Join Now' ? '#FFBB37' : 'red',
-                                color: hoveredButton === 'Join Now' ? 'black' : 'white',
 
-                            }}
-                            onMouseEnter={() => handleMouseEnterbutton('Join Now')}
-                            onMouseLeave={handleMouseLeavesbutton}
-                        >
-                            JOIN US!
-                        </Button>
-                        <Button
-                            onClick={() => { }}
-                            style={{
-                                ...styles.joinUsButton,
-                                backgroundColor: hoveredButton === 'Sign Up' ? '#FFBB37' : 'red',
-                                color: hoveredButton === 'Sign Up' ? 'black' : 'white',
+      <FloatingButton />
 
-                                marginLeft: '5px',
-                            }}
-                            onMouseEnter={() => handleMouseEnterbutton('Sign Up')}
-                            onMouseLeave={handleMouseLeavesbutton}
-                        >
-                            CLIENT SIGN UP
-                        </Button>
-                       
-                    </Nav>
-                </Navbar.Collapse>
-            </Navbar>
+      <Navigation
+      sliderRef={sliderRef}
+      overViewRef={overViewRef}
+      teamRef={contactRef}
+      contactRef={contactRef}
+      />
 
-            <section style={styles.section1}>
-                <img
+        <section  style={styles.section1} ref={homeRef}>
+                <img 
                     src={require('./assets/LyfGurad-white-logo.png')} // Replace with your image path
                     alt="Top Left"
                     style={styles.topLeftImage}
                 />
-                <div style={styles.text}>
+                <div  style={styles.text}>
                     <h2 style={styles.section1Text1}>LYFGUARD: Your Lifeline, Our Priority</h2>
                     <p style={styles.section1Text2}>Free, fast-response ambulance service.</p>
                     <div style={styles.bookambulanceButton}>
-                        <Link to="/booking" >
+                    <Link to="/booking"   state= {{ mapComponent: true }}>
+                            
                             <button
-                                onClick={handleBookAmbulance}
+                               onClick={handleBookNow}
                                 style={{
                                     ...styles.button,
                                     backgroundColor: hoveredButton === 'ambulance' ? '#FFBB37' : 'red',
@@ -189,49 +181,76 @@ const Home = () => {
                             </button>
                         </Link>
                     </div>
+                    <div>
+                    <a
+                  href="tel:18008891258"
+                  style={{ color: "inherit", textDecoration: "none" }}
+                >
+      <button style={buttonStyle}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}>
+        
+        {/* Image Container for Overlay */}
+        <div style={imageContainerStyle}>
+          <img 
+            src={require("./assets/Group 1.png")}
+            alt="Background Image"
+            style={nestedImageStyle}
+          />
+         
+        </div>
+        <span style={textStyle}>1800-889-1280</span>
+      </button>
+      </a>
+    </div>
+    
+
+
                 </div>
                 <img
-                    src={require('./assets/bannerimg.png')}
-                    alt="Master Image"
-                    style={styles.bannerimg}
-                />
+        src={require('./assets/bannerimg.png')}
+        alt="Ambulance service banner"
+        style={styles.bannerimg}
+    />
+    
             </section>
+            
 
             <Container >
                 <Row className="align-items-center">
                     <Col xs={12} md={12} lg={12} sm={12}>
-                        <div ref={sliderRef}>
+                        <div ref={overViewRef}>
                             <h2 style={styles.ourpartners}>OUR PARTNERS</h2>
                             <Slider {...settings} >
-                                <div className="swiper-slide" style={styles.slide}>
+                                {/* <div className="swiper-slide" style={styles.slide}>
                                     <img
                                         src={require('./assets/amazon_img.webp')}
                                         alt="Amazon"
                                         style={styles.slideimage}
                                     />
-                                </div>
-                                <div className="swiper-slide" style={styles.slide}>
+                                </div> */}
+                                <div className="swiper-slide mt-4" style={styles.slide}>
                                     <img
                                         src={require('./assets/company_img.png')}
                                         alt="Company"
                                         style={styles.slideimage}
                                     />
                                 </div>
-                                <div className="swiper-slide" style={styles.slide}>
+                                <div className="swiper-slide mt-4 20" style={styles.slide}>
                                     <img
                                         src={require('./assets/generic_img.png')}
                                         alt="Generic"
                                         style={styles.slideimage}
                                     />
                                 </div>
-                                <div className="swiper-slide" style={styles.slide}>
+                                <div className="swiper-slide mt-3" style={styles.slide}>
                                     <img
                                         src={require('./assets/meta_img.png')}
                                         alt="Meta"
                                         style={styles.slideimage}
                                     />
                                 </div>
-                                <div className="swiper-slide" style={styles.slide}>
+                                <div className="swiper-slide mt-2" style={styles.slide}>
                                     <img
                                         src={require('./assets/wing_img.png')}
                                         alt="Wing"
@@ -244,9 +263,130 @@ const Home = () => {
                 </Row>
             </Container>
 
-            <Container>
+           
+            <Container fluid ref={sliderRef}  style={styles.section3}>
+               <Col>
+                <Row className="align-items-center">
+                    <Col xs={12} md={6} sm={6} className="text-center text-md-start" style={styles.text}>
+                        <img
+                            src={require('./assets/care.png')}
+                            style={styles.cardlogo2}
+                            alt="Care Logo"
+                        />
+                        <p style={styles.section3Text1}>Your journey towards instant care is just a click away-</p>
+                        <p style={styles.section3Text2}>
+                            Collaborate over projects with your team and clients optimized for mobile and tablet.
+                        </p>
+
+                        <div className="d-flex flex-column align-items-center">
+
+                        <Button style={styles.moreButton} onClick={toggleShowMore}>
+
+
+                            {showMore ? (
+                                <p style={styles.section3Text2}>
+                                    Don't let slow page speeds drive. Our innovative platform empowers anyone to convert clicks. You'll publish your first landing page in minutes.
+                                </p>
+                            ) : (
+                                'See More...'
+                            )}
+                        </Button>
+
+                            <Button
+                                style={{
+                                    ...styles.downloadnowButton,
+                                    backgroundColor: hoveredButton === 'download1' ? '#FFBB37' : 'red',
+                                    color: hoveredButton === 'download1' ? 'black' : 'white',
+                                    ...(isBooked && styles.bookedButton),
+                                    // Default shadow
+      }}
+                            
+                                onMouseEnter={() => handleMouseEnterbutton('download1')}
+                                onMouseLeave={handleMouseLeavesbutton}
+                            >
+                                DOWNLOAD NOW!
+                            </Button>
+                        </div>
+
+                    </Col>
+                    <img
+                        src={require('./assets/masterimage2.png')}
+                        style={styles.image}
+                        alt="Master"
+                    />
+                </Row>
+                <Row className="align-items-center">
+                    <img
+                        src={require('./assets/masterimage2.png')}
+                        style={styles.image}
+                        alt="Master"
+                    />
+
+                    <Col xs={12} md={6} sm={6} className="text-center text-md-start" style={styles.text}>
+                        <img
+                            src={require('./assets/Bookingoptions.png')}
+                            style={styles.cardlogo2}
+                            alt="Booking Options Logo"
+                        />
+'
+                        <p style={styles.section3Text1}>Explore the booking options now</p>
+                        <p style={styles.section3Text2}>
+                            Collaborate over projects with your team and clients optimized for mobile and tablet.
+                        </p>
+
+                        <div className="d-flex flex-column align-items-center">
+                        <Button style={styles.moreButton} onClick={toggleShowMoreExplorebooking}>
+                            {showMores ? (
+                                <p style={styles.section3Text2}>
+                                    Don't let slow page speeds drive. Our innovative platform empowers anyone to convert clicks. You'll publish your first landing page in minutes.
+                                </p>
+                            ) : (
+                                'See More...'
+                            )}
+                        </Button>
+                       
+                            <Button
+                                style={{
+                                    ...styles.downloadnowButton,
+                                    backgroundColor: hoveredButton === 'download' ? '#FFBB37' : 'red',
+                                    color: hoveredButton === 'download' ? 'black' : 'white',
+                                    ...(isBooked && styles.bookedButton),
+                                    
+                                }}
+                                onMouseEnter={() => handleMouseEnterbutton('download')}
+                                onMouseLeave={handleMouseLeavesbutton}
+                            >
+                                DOWNLOAD NOW!
+                            </Button>
+
+                            </div>
+                    </Col>
+                </Row>
+                </Col> 
+            </Container>
+
+            <div style={styles.section5}>
+                <p style={styles.section5Text1}>Witness the Impact</p>
+                <p style={styles.section5Text2}>Hear from Our Valued Clients</p>
+                <div style={styles.section5content}>
+                    <div>
+                        <p style={styles.section5contentText1}>100%</p>
+                        <p style={styles.section5contentText2}>Satisfaction</p>
+                    </div>
+                    <div>
+                        <p style={styles.section5contentText1}>120K</p>
+                        <p style={styles.section5contentText2}>Happy Users</p>
+                    </div>
+                    <div>
+                        <p style={styles.section5contentText1}>125k+</p>
+                        <p style={styles.section5contentText2}>Downloads</p>
+                    </div>
+                </div>
+            </div>
+
+            <Container ref={overViewRef}>
                 <div>
-                    <h3 style={styles.section2Text1}>SERVICES</h3>
+                    <h3 style={styles.section2Text1}>OVERVIEW</h3>
                     <h4 style={styles.section2Text2}>Discover Our Exceptional Features</h4>
                     <p style={styles.section2Text3}>Experience the future of emergency medical transport with LYFGUARD. Your lifeline, our priority.</p>
                 </div>
@@ -357,205 +497,6 @@ const Home = () => {
                 </Row>
             </Container>
 
-            <Container fluid ref={overViewRef} style={styles.section3}>
-               <Col>
-                <Row className="align-items-center">
-                    <Col xs={12} md={6} sm={6} className="text-center text-md-start" style={styles.text}>
-                        <img
-                            src={require('./assets/care.png')}
-                            style={styles.cardlogo2}
-                            alt="Care Logo"
-                        />
-                        <p style={styles.section3Text1}>Your journey towards instant care is just a click away-</p>
-                        {/* <p style={styles.section3Text2}>
-                            Collaborate over projects with your team and clients optimized for mobile and tablet.
-                        </p>
-                        <Button style={styles.moreButton} onClick={toggleShowMore}>
-
-
-                            {showMore ? (
-                                <p style={styles.section3Text2}>
-                                    Don't let slow page speeds drive. Our innovative platform empowers anyone to convert clicks. You'll publish your first landing page in minutes.
-                                </p>
-                            ) : (
-                                'See More...'
-                            )}
-                        </Button> */}
-
-                            <Button
-                                style={{
-                                    ...styles.downloadnowButton,
-                                    backgroundColor: hoveredButton === 'download1' ? '#FFBB37' : 'red',
-                                    color: hoveredButton === 'download1' ? 'black' : 'white',
-                                    ...(isBooked && styles.bookedButton),
-                                }}
-                                onMouseEnter={() => handleMouseEnterbutton('download1')}
-                                onMouseLeave={handleMouseLeavesbutton}
-                            >
-                                DOWNLOAD NOW!
-                            </Button>
-                    </Col>
-                    <img
-                        src={require('./assets/masterimage2.png')}
-                        style={styles.image}
-                        alt="Master Image"
-                    />
-                </Row>
-                <Row className="align-items-center">
-                    <img
-                        src={require('./assets/masterimage2.png')}
-                        style={styles.image}
-                        alt="Master Image"
-                    />
-
-                    <Col xs={12} md={6} sm={6} className="text-center text-md-start" style={styles.text}>
-                        <img
-                            src={require('./assets/Bookingoptions.png')}
-                            style={styles.cardlogo2}
-                            alt="Booking Options Logo"
-                        />
-
-                        <p style={styles.section3Text1}>Explore the booking options now</p>
-                        {/* <p style={styles.section3Text2}>
-                            Collaborate over projects with your team and clients optimized for mobile and tablet.
-                        </p>
-                        <Button style={styles.moreButton} onClick={toggleShowMoreExplorebooking}>
-                            {showMores ? (
-                                <p style={styles.section3Text2}>
-                                    Don't let slow page speeds drive. Our innovative platform empowers anyone to convert clicks. You'll publish your first landing page in minutes.
-                                </p>
-                            ) : (
-                                'See More...'
-                            )}
-                        </Button> */}
-                       
-                            <Button
-                                style={{
-                                    ...styles.downloadnowButton,
-                                    backgroundColor: hoveredButton === 'download' ? '#FFBB37' : 'red',
-                                    color: hoveredButton === 'download' ? 'black' : 'white',
-                                    ...(isBooked && styles.bookedButton),
-                                }}
-                                onMouseEnter={() => handleMouseEnterbutton('download')}
-                                onMouseLeave={handleMouseLeavesbutton}
-                            >
-                                DOWNLOAD NOW!
-                            </Button>
-                    </Col>
-                </Row>
-                </Col> 
-            </Container>
-
-            <div style={styles.section5}>
-                <p style={styles.section5Text1}>Witness the Impact</p>
-                <p style={styles.section5Text2}>Hear from Our Valued Clients</p>
-                <div style={styles.section5content}>
-                    <div>
-                        <p style={styles.section5contentText1}>100%</p>
-                        <p style={styles.section5contentText2}>Satisfaction</p>
-                    </div>
-                    <div>
-                        <p style={styles.section5contentText1}>120K</p>
-                        <p style={styles.section5contentText2}>Happy Users</p>
-                    </div>
-                    <div>
-                        <p style={styles.section5contentText1}>125k+</p>
-                        <p style={styles.section5contentText2}>Downloads</p>
-                    </div>
-                </div>
-            </div>
-
-            <Container>
-                <div ref={teamRef}>
-                    <p style={styles.section2Text1}>Meet Our Team</p>
-                    <p style={styles.section2Text3}>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
-                </div>
-            </Container>
-
-            <Container style={styles.cardContainer}>
-                <Row>
-                    <Col lg={3} md={6} sm={12}>
-                        <div
-                            style={{
-                                ...styles.cardsction2,
-                                backgroundColor: hoveredStates[6] ? '#066951' : '#FFFFF7',
-
-                            }}
-                            onMouseEnter={() => handleMouseEnter(6)}
-                            onMouseLeave={() => handleMouseLeave(6)}
-                        >
-                            <img
-                                src={require('./assets/Partnership.png')}
-                                style={styles.avatar}
-                                alt="User"
-                            />
-                            <p style={{ ...styles.teamName, color: hoveredStates[6] ? '#FFFFFF' : '#000000' }}>Shrinivas</p>
-                            <p style={{ ...styles.teamDescription, color: hoveredStates[6] ? '#FBB040' : 'red' }}>CEO of LyfGuard</p>
-                            <p style={{ ...styles.subteamDescription, color: hoveredStates[6] ? '#FFFFFF' : '#000000' }}>As we move forward, let's continue to build upon our achievements and strive for even greater milestones. Together, we have the potential to reach new heights and solidify our position as a leader in the industry.</p>
-                        </div>
-                    </Col>
-                    <Col lg={3} md={6} sm={12}>
-                        <div style={{
-                            ...styles.cardsction2,
-                            backgroundColor: hoveredStates[7] ? '#066951' : '#FFFFF7',
-
-                        }}
-                            onMouseEnter={() => handleMouseEnter(7)}
-                            onMouseLeave={() => handleMouseLeave(7)}>
-                            <img
-                                src={require('./assets/Partnership.png')}
-                                style={styles.avatar}
-                                alt="User"
-                            />
-                            <p style={{ ...styles.teamName, color: hoveredStates[7] ? '#FFFFFF' : '#000000' }}>Aishvarya</p>
-                            <p style={{ ...styles.teamDescription, color: hoveredStates[7] ? '#FBB040' : 'red' }}>Senior Developer</p>
-                            <p style={{ ...styles.subteamDescription, color: hoveredStates[7] ? '#FFFFFF' : '#000000' }}>As we move forward, let's continue to build upon our achievements and strive for even greater milestones. Together, we have the potential to reach new heights and solidify our position as a leader in the industry.</p>
-
-                        </div>
-                    </Col>
-                    <Col lg={3} md={6} sm={12}>
-                        <div
-                            style={{
-                                ...styles.cardsction2,
-                                backgroundColor: hoveredStates[8] ? '#066951' : '#FFFFF7',
-
-                            }}
-                            onMouseEnter={() => handleMouseEnter(8)}
-                            onMouseLeave={() => handleMouseLeave(8)}
-                        >
-                            <img
-                                src={require('./assets/Partnership.png')}
-                                style={styles.avatar}
-                                alt="User"
-                            />
-                            <p style={{ ...styles.teamName, color: hoveredStates[8] ? '#FFFFFF' : '#000000' }}>Nikhil S G </p>
-                            <p style={{ ...styles.teamDescription, color: hoveredStates[8] ? '#FBB040' : 'red' }}>Frontend Developer</p>
-                            <p style={{ ...styles.subteamDescription, color: hoveredStates[8] ? '#FFFFFF' : '#000000' }}>As we move forward, let's continue to build upon our achievements and strive for even greater milestones. Together, we have the potential to reach new heights and solidify our position as a leader in the industry.</p>
-
-                        </div>
-                    </Col>
-                    <Col lg={3} md={6} sm={12}>
-                        <div style={{
-                            ...styles.cardsction2,
-                            backgroundColor: hoveredStates[9] ? '#066951' : '#FFFFF7',
-
-                        }}
-                            onMouseEnter={() => handleMouseEnter(9)}
-                            onMouseLeave={() => handleMouseLeave(9)}>
-                            <img
-                                src={require('./assets/Partnership.png')}
-                                style={styles.avatar}
-                                alt="User"
-                            />
-                            <p style={{ ...styles.teamName, color: hoveredStates[9] ? '#FFFFFF' : '#000000' }}>Danish suhail</p>
-                            <p style={{ ...styles.teamDescription, color: hoveredStates[9] ? '#FBB040' : 'red' }}>UI/UX</p>
-                            <p style={{ ...styles.subteamDescription, color: hoveredStates[9] ? '#FFFFFF' : '#000000' }}>As we move forward, let's continue to build upon our achievements and strive for even greater milestones. Together, we have the potential to reach new heights and solidify our position as a leader in the industry.</p>
-
-                        </div>
-                    </Col>
-                </Row>
-            </Container>
-
             <Container fluid ref={contactRef} style={styles.section7}>
                 <Row>
                     <Col lg={12}>
@@ -596,87 +537,16 @@ const Home = () => {
                 </Row>
             </Container>
 
-            <Container fluid style={styles.Section8container}>
-                <Row>
-                    <img
-                        src={require('./assets/LyfGurad-white-logo.png')} // Replace with your image path
-                        alt="Top Left"
-                        style={styles.bottomRight}
-                    />
-                    <Col xs={12} md={3} lg={3}>
+            <FooterScreen/>
 
-                        <p style={styles.Section8text}>Contact</p>
-                        <div style={styles.section8subtext}>
-                            <p style={styles.Section8textsub}>reach@lyfguard.in</p>
-                            <p style={styles.Section8textsub}>support@lyfguard.in</p>
-                            <p style={styles.Section8textsub}>'1800-889-1258'</p>
-                        </div>
-                    </Col>
-                    <Col xs={12} md={3} lg={3}>
-                        <p style={styles.Section8text}>Services</p>
-                        <div style={styles.section8subtext}>
-                            <p style={styles.Section8textsub}>Emergency Ambulance</p>
-                            <p style={styles.Section8textsub}>Private Ambulance</p>
-                            <p style={styles.Section8textsub}>Mortuary</p>
-                            <p style={styles.Section8textsub}>First AID</p>
-                        </div>
-                    </Col>
-                    <Col xs={12} md={3} lg={3} className="mb-4 mb-lg-8">
-                        <p style={styles.Section8text}>Company</p>
-                        <div style={styles.section8subtext}>
-                            <p style={styles.Section8textsub}>About Us</p>
-                            <p style={styles.Section8textsub}>Jobs</p>
-                            <p style={styles.Section8textsub}>Join us</p>
-                            {/* <p style={styles.Section8textsub}>Contact Us</p> */}
-                        </div>
-                    </Col>
-                    <Col xs={12} md={3} lg={3} className="mb-4 mb-lg-10">
-                        <p style={styles.Section8text}>Legal</p>
-                        <div style={styles.section8subtext}>
-                            <p style={styles.Section8textsub}>Terms & Conditions</p>
-                            <p style={styles.Section8textsub}>Privacy Policy</p>
-                        </div>
-                    </Col>
-                </Row>
-            </Container>
         </div>
     );
 }
 
 const styles = {
 
-    appBar: {
-        justifyContent: 'space-around',
-        height: 60,
-        backgroundColor: '#066951',
-        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-        borderBottom: '1px solid #E0E0E0',
-        display: 'flex',
-        flexDirection: 'row',
-        padding: '20 10px',
-    },
-    companyName: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        color: 'white',
-        marginRight: '25%'
-    },
-    joinUsButton: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: 'white',
-        backgroundColor: 'red',
-        textAlign: 'center',
-        borderRadius: '20px',
-        border: 'none',
-        cursor: 'pointer',
-    },
-    menuItem: {
-        textAlign: 'center',
-        textDecoration: 'none',
-        fontWeight: 'bold',
-        fontSize: 17,
-        color: 'white',
+    container :{
+         overflowY: 'scroll'
     },
     section1: {
         display: 'flex',
@@ -692,7 +562,7 @@ const styles = {
     },
     topLeftImage: {
         position: 'absolute',
-        top: '10%',
+        top: '15%',
         right: '2%',
         width: '100px', // Adjust the width as needed
         height: 'auto',
@@ -703,6 +573,7 @@ const styles = {
         margin: '5%',
         zIndex: 2,
         maxWidth: '100%',
+        marginTop: '5%'
     },
     section1Text1: {
         fontSize: 28,
@@ -734,7 +605,7 @@ const styles = {
     image: {
         marginRight: '6%',
         marginTop: '6%',
-        marginLeft: '6%',
+        marginLeft: '4%',
         width: 180,
         height: 350,
         resizeMode: 'contain',
@@ -745,7 +616,9 @@ const styles = {
         height: 500,
         width:'50%',
         resizeMode: 'contain',
+        marginTop: '0'
     },
+    
     ourpartners: {
         marginTop: '3%',
         textAlign: 'center',
@@ -753,7 +626,6 @@ const styles = {
         fontSize: 22,
         fontWeight: '600',
     },
-
     slide: {
         display: 'flex',
         justifyContent: 'center',
@@ -801,10 +673,11 @@ const styles = {
         marginTop: '4%'
     },
     cardTitle: {
-        fontSize: 24,
+        fontSize: 22,
         fontWeight: '500',
         marginBottom: 10,
         color: 'black',
+       
     },
     cardDescription: {
         fontSize: 15,
@@ -861,11 +734,22 @@ const styles = {
         cursor: 'pointer',
         margin: '2%',
         background: 'none',
-        fontSize: 15
+        fontSize: 15,
+       
+        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.3)', // Default lighter shadow
+        borderBottom: '2px solid black', // Black border on bottom
+    borderRight: '2px solid black', 
+       
+        boxShadow: 'background-color 0.5s ease'
+        
+        
     },
+    bookedButton: {
+        backgroundColor: '#B8B8B8', // Example for booked state
+      },
     section5: {
-        backgroundColor: '#066951',
-       marginTop:'0.1%'
+       backgroundColor: '#066951',
+       marginTop:'0.1%',
     },
     section5Text1: {
         color: 'white',
@@ -893,6 +777,7 @@ const styles = {
     section5contentText2: {
         fontSize: 16,
         color: 'white',
+        marginBottom:'50%'
     },
     cardContainerSection2: {
         display: 'flex',
@@ -904,11 +789,6 @@ const styles = {
         padding: '5%',
         marginBottom: '3%',
         boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-    },
-    cardTitle: {
-        fontSize: '16px',
-        fontWeight: 'bold',
-        marginBottom: '4%',
     },
     teamName: {
         fontSize: '20px',
@@ -935,48 +815,43 @@ const styles = {
         textAlign: 'center',
         fontSize: 16,
     },
-    appgooglestorebutton: {
-        display: 'flex',
-        justifyContent: 'center',
-    },
-    Section8container: {
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: 'black',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-
-    Section8text: {
-        color: '#A1EAFB',
-        textAlign: 'center',
-        fontWeight: '800',
-        fontSize: 25,
-        margin: '5%'
-    },
-    Section8textsub: {
-        margin: '2.2%',
+    number:{
+        margin: '2%',
+        padding: '5px 10px', // Adjust padding as needed
         color: 'white',
-        fontSize: 17,
-        textAlign: 'center',
+       
+        fontSize: '200%',
+        fontWeight: 'bold',
+        position: 'relative', // To allow overlapping with the image
+        left: '-20px',
     },
-    section8subtext: {
-        marginTop: '6%'
+    phone:{
+        display: 'flex',
+        alignItems: 'center',
+    margin: 0,
+    padding: 0,
+    position: 'relative',
+    left: '-20px',
+    
+    
+   
+
 
     },
-    footerlogo: {
-        width: '10%',
-        height: 'auto',
+    callimg:{
+        width: '80px',
+        height: '80px',
+        marginTop: '4%',
+        padding: 0,
+        position: 'relative', 
+
     },
-    bottomRight:{
-        position: 'absolute',
-        top: '10%',
-        left: '2%',
-        width: '100px', // Adjust the width as needed
-        height: 'auto',
-        zIndex: 1,
+    phone:{
+        backgroundColor:'red',
+        borderRadius: '10%',
+        color: 'white',
+        marginTop: '10%'
+
     }
 };
 

@@ -40,6 +40,7 @@ function EmergencyScreen({ navigation }) {
             const selectedType = emergencyTypes.find(type => type.name === selectedButton);
             if (selectedType) {
                 navigate('/map', { state: { selectedButton, typeId: selectedType.id } });
+                console.log(`Selected Button: ${selectedButton}, Type ID: ${selectedType.id }`);
             }
         }
     };

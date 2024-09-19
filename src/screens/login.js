@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { SEND_OTP } from './api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const BookingScreen = () => {
   const [phone, setPhone] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check if there's a special flow
+  const fromEmergency = location.state?.fromEmergency || false;
+  const mapComponent = location.state?.mapComponent || false;
+
 
   const validateForm = () => {
     let errors = {};
@@ -35,7 +41,7 @@ const BookingScreen = () => {
         setErrors({});
 
         // Navigate to OTP screen with phone state
-        navigate('/otp', { state: { phone: phone } });
+        navigate('/otp', { state: { phone: phone, fromEmergency: fromEmergency,mapComponent:mapComponent } });
 
       } catch (error) {
         console.error("Error fetching OTP:", error);
